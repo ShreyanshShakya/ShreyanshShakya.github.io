@@ -1,0 +1,20 @@
+# Why Distributed Training Still Bottlenecks at Scale
+
+Distributed data-parallel training is attractive because it is easy to understand: split the batch, run the backward pass on each worker, synchronize gradients, and update the model.
+
+The problem is that synchronization is not free. Once a model grows large enough, the network becomes the real bottleneck, not the GPU.
+
+## The core issue
+
+Every training step has two clocks:
+
+- Compute clock: how long the GPUs spend on forward and backward passes.
+- Communication clock: how long the cluster spends moving gradients around.
+
+If communication cannot be hidden behind compute, scaling efficiency drops quickly.
+
+## What worked
+
+In practice, the biggest gains came from overlapping communication with backward computation, reordering gradient buckets based on real runtime traces, and keeping an eye on the slowest worker in the cluster.
+
+> The lesson is simple: optimize the synchronization pipeline, not just the model code.

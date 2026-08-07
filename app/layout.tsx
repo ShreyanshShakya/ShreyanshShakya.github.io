@@ -37,7 +37,7 @@ export default function RootLayout({
       >
         <CursorGlow />
         <Navbar />
-        <main className="flex-grow pt-16">{children}</main>
+        <main className="grow pt-16">{children}</main>
         <Footer />
       </body>
     </html>

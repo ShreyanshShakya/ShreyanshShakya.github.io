@@ -1,0 +1,16 @@
+# What I Learned Building Multi-Agent Systems
+
+Multi-agent systems look simple on the surface: one orchestrator, a few specialist agents, and a shared task.
+
+The hard part is the glue. Once multiple agents start reasoning in parallel, you inherit the same problems that show up in distributed systems: partial failure, inconsistent state, and coordination overhead.
+
+## Practical lessons
+
+- Keep state structured.
+- Limit what each agent can see.
+- Add validation at every boundary.
+- Treat retries as part of the design, not an exception.
+
+## The takeaway
+
+Good multi-agent design is less about prompt cleverness and more about systems discipline.
