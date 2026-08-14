@@ -1,0 +1,84 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#080808;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a1a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#5B8CFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle grid pattern -->
+  <g opacity="0.03">
+    <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" stroke="white" stroke-width="0.5"/>
+    </pattern>
+    <rect width="1200" height="630" fill="url(#grid)"/>
+  </g>
+  
+  <!-- Accent line -->
+  <line x1="120" y1="180" x2="1080" y2="180" stroke="url(#accentGrad)" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Main content -->
+  <g transform="translate(120, 200)">
+    <!-- Name -->
+    <text x="0" y="0" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" 
+          font-size="56" font-weight="800" fill="white" letter-spacing="-1">
+      Shreyansh Shakya
+    </text>
+    
+    <!-- Title -->
+    <text x="0" y="72" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" 
+          font-size="28" font-weight="500" fill="#5B8CFF" letter-spacing="0.5">
+      AI Engineer & ML Systems Builder
+    </text>
+    
+    <!-- Subtitle -->
+    <text x="0" y="116" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" 
+          font-size="18" font-weight="400" fill="#8B8B8B">
+      Distributed ML · Agentic AI · Research Engineering
+    </text>
+    
+    <!-- Badges -->
+    <g transform="translate(0, 160)">
+      <g transform="translate(0, 0)">
+        <rect x="0" y="0" width="160" height="36" rx="18" fill="#1E1E1E" stroke="#5B8CFF" stroke-width="1"/>
+        <text x="80" y="23" font-family="monospace" font-size="12" font-weight="500" fill="#5B8CFF" text-anchor="middle">
+          Distributed ML
+        </text>
+      </g>
+      <g transform="translate(176, 0)">
+        <rect x="0" y="0" width="140" height="36" rx="18" fill="#1E1E1E" stroke="#8B5CF6" stroke-width="1"/>
+        <text x="70" y="23" font-family="monospace" font-size="12" font-weight="500" fill="#8B5CF6" text-anchor="middle">
+          Agentic AI
+        </text>
+      </g>
+      <g transform="translate(332, 0)">
+        <rect x="0" y="0" width="180" height="36" rx="18" fill="#1E1E1E" stroke="#22C55E" stroke-width="1"/>
+        <text x="90" y="23" font-family="monospace" font-size="12" font-weight="500" fill="#22C55E" text-anchor="middle">
+          Research Engineering
+        </text>
+      </g>
+    </g>
+  </g>
+  
+  <!-- Footer -->
+  <g transform="translate(120, 550)">
+    <text x="0" y="0" font-family="monospace" font-size="14" fill="#5B8CFF" font-weight="500">
+      shreyanshshakya.github.io
+    </text>
+    <text x="380" y="0" font-family="monospace" font-size="12" fill="#555" text-anchor="end">
+      AI Engineer Portfolio
+    </text>
+  </g>
+  
+  <!-- Decorative elements -->
+  <circle cx="1050" cy="80" r="120" fill="#5B8CFF" opacity="0.06"/>
+  <circle cx="1150" cy="550" r="180" fill="#8B5CF6" opacity="0.05"/>
+  <circle cx="50" cy="480" r="100" fill="#22C55E" opacity="0.04"/>
+</svg>

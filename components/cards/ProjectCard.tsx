@@ -13,11 +13,19 @@ interface ProjectCardProps {
     description: string;
     tags: string[];
     link: string;
+    challenges: string[];
+    lessons: string[];
   };
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+
+  // Extract engineering highlights from challenges and lessons
+  const engineeringHighlights = [
+    ...project.challenges.slice(0, 3),
+    ...project.lessons.slice(0, 3),
+  ].slice(0, 6);
 
   return (
     <motion.div
@@ -37,26 +45,49 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <div className="absolute -inset-px bg-linear-to-r from-accent/50 to-transparent rounded-2xl z-0 blur-sm" />
           </div>
 
-          <div className="relative z-10 p-8 md:p-12 flex flex-col md:flex-row gap-8 items-center bg-card rounded-2xl h-full">
-            <div className="flex-1 space-y-6">
-              <h3 className="text-3xl font-heading font-bold text-foreground">
+          <div className="relative z-10 p-6 md:p-8 bg-card rounded-2xl">
+            {/* Architecture Diagram - on top on mobile, side by side on desktop */}
+            <div className="md:order-2 mb-6 md:mb-0 md:w-2/5 aspect-4/3 rounded-xl overflow-hidden bg-background relative border border-border/50 p-3">
+              <ArchitectureDiagram
+                projectId={project.id}
+                isHovered={isHovered}
+              />
+            </div>
+
+            <div className="md:order-1 md:w-3/5 space-y-5">
+              <h3 className="text-2xl md:text-3xl font-heading font-bold text-foreground">
                 {project.title}
               </h3>
-              <p className="text-secondary text-lg leading-relaxed max-w-2xl">
+              <p className="text-secondary text-base md:text-lg leading-relaxed">
                 {project.description}
               </p>
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2">
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 rounded-full border border-border bg-background/50 text-xs font-mono text-secondary"
+                    className="px-2 py-1 rounded-full border border-border bg-background/50 text-xs font-mono text-secondary"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
 
-              <div className="pt-4 flex items-center text-accent font-medium gap-2">
+              {/* Engineering Highlights */}
+              <div className="pt-3 border-t border-border/50">
+                <h4 className="text-xs font-mono text-accent uppercase tracking-wider mb-2">
+                  Engineering Highlights
+                </h4>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-secondary">
+                  {engineeringHighlights.map((highlight, idx) => (
+                    <li key={idx} className="flex items-center gap-2 leading-relaxed">
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent/50 flex-shrink-0" />
+                      {highlight}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="pt-3 flex items-center text-accent font-medium gap-2">
                 <span>View Case Study</span>
                 <motion.div
                   animate={{ x: isHovered ? 5 : 0 }}
@@ -65,14 +96,6 @@ export function ProjectCard({ project }: ProjectCardProps) {
                   <ArrowRight className="w-4 h-4" />
                 </motion.div>
               </div>
-            </div>
-
-            {/* Architecture Diagram */}
-            <div className="w-full md:w-2/5 aspect-4/3 rounded-xl overflow-hidden bg-background relative border border-border/50 p-4">
-              <ArchitectureDiagram
-                projectId={project.id}
-                isHovered={isHovered}
-              />
             </div>
           </div>
         </div>

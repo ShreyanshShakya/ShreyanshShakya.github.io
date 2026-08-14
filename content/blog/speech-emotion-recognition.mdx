@@ -1,0 +1,107 @@
+---
+title: "Building Real-Time Speech Emotion Recognition"
+date: "2025-08-15"
+tags: ["Speech AI", "Deep Learning", "TensorFlow", "PyTorch", "Librosa", "Real-time", "IEEE"]
+excerpt: "How I built a complete speech emotion recognition pipeline from audio preprocessing to real-time inference, tackling speaker variability, noise robustness, and deployment challenges. Published at IEEE DECoN 2025."
+---
+
+# Building Real-Time Speech Emotion Recognition
+
+> **Published — IEEE DECoN 2025**  
+> **DOI:** [10.1109/DECoN67170.2025.11448083](https://doi.org/10.1109/DECoN67170.2025.11448083)  
+> **Title:** *Speech Emotion Recognition: A Human-Centric Framework with Enhanced Data Augmentation and Lightweight CNN*
+
+Speech Emotion Recognition (SER) is a critical component of affective computing—enabling machines to understand not just *what* is said, but *how* it's said. This project presented the full engineering challenge: from raw audio to real-time emotion classification.
+
+## The Problem
+
+Human emotional expression in speech varies enormously:
+- **Speaker variability**: Pitch, accent, speaking rate differ wildly
+- **Recording conditions**: Background noise, microphone quality, room acoustics
+- **Class imbalance**: Some emotions (neutral) dominate datasets
+- **Real-time constraints**: Sub-100ms inference for conversational AI
+
+## Architecture
+
+```
+Audio Input → Preprocessing → MFCC Extraction → CNN-RNN Classifier → Emotion Prediction
+```
+
+### Preprocessing Pipeline
+1. **Audio loading** with librosa (consistent sample rate: 22050 Hz)
+2. **Silence removal** using energy-based VAD
+3. **Signal normalization** to [-1, 1] range
+4. **Fixed-length segmentation** (3-second windows with overlap)
+
+### Feature Extraction
+**MFCCs (Mel-Frequency Cepstral Coefficients)** formed the primary representation—capturing perceptually relevant spectral information while reducing dimensionality from raw waveform (44KB/sec → ~1KB/frame).
+
+### Model Architecture
+Hybrid **CNN + Bidirectional LSTM**:
+- **CNN layers**: Local spectral pattern extraction from MFCC sequences
+- **BiLSTM layers**: Temporal dependency modeling across utterance
+- **Attention pooling**: Weighted aggregation of temporal features
+- **Output**: 7-8 emotion classes (neutral, happy, sad, angry, fear, disgust, surprise)
+
+## Key Engineering Challenges
+
+### 1. Speaker Generalization
+Models easily overfit to training speakers. Solutions:
+- **Data augmentation**: Pitch shifting, time stretching, noise injection
+- **Speaker-independent splits**: Train/test by speaker, not sample
+- **Domain adversarial training**: Gradient reversal for speaker invariance
+
+### 2. Class Imbalance
+Neutral class often 40%+ of data. Used:
+- **Weighted cross-entropy** with inverse frequency weights
+- **Focal loss** to focus on hard examples
+- **Oversampling** minority classes in each batch
+
+### 3. Real-Time Inference
+- **ONNX export** for optimized inference
+- **Quantization** (INT8) for edge deployment
+- **Streaming chunk processing** with overlap-add for continuous audio
+
+## Results
+
+| Dataset | Classes | Accuracy | F1 (Macro) | Latency |
+|---------|---------|----------|------------|---------|
+| RAVDESS | 8 | ~78% | ~0.75 | 45ms |
+| CREMA-D | 6 | ~73% | ~0.70 | 52ms |
+
+## Lessons Learned
+
+1. **Preprocessing > Architecture**: Clean, consistent audio pipeline mattered more than model tweaks
+2. **MFCCs still work**: Despite raw waveform trends, MFCCs provide strong perceptual features with low compute
+3. **Train/test split by speaker**: Random splits inflate metrics; speaker-independent is the real test
+4. **Consistency is deployment**: Same preprocessing at train and inference time is non-negotiable
+5. **Hybrid CNN-RNN > Pure approaches**: Local patterns + temporal context both matter for emotion
+
+## Future Work
+
+- Transformer-based speech models (Wav2Vec2, HuBERT fine-tuning)
+- Self-supervised speech representation learning
+- Multimodal emotion recognition (audio + video + text)
+- Cross-lingual emotion recognition
+- Noise-robust speech processing with denoising front-ends
+- Edge deployment (TensorRT, CoreML, TFLite)
+
+## Resources
+
+- [RAVDESS Dataset](https://zenodo.org/record/1188976)
+- [CREMA-D Dataset](https://github.com/CheyneyComputerScience/CREMA-D)
+- [Librosa Documentation](https://librosa.org/doc/latest/index.html)
+- [TensorFlow/Keras](https://www.tensorflow.org/)
+
+## Publication
+
+**Speech Emotion Recognition: A Human-Centric Framework with Enhanced Data Augmentation and Lightweight CNN**  
+*IEEE DECoN 2025 (Distributed Computing and Networking Conference)*  
+**DOI:** [10.1109/DECoN67170.2025.11448083](https://doi.org/10.1109/DECoN67170.2025.11448083)  
+**Year:** 2025
+
+**Key Contributions:**
+- Enhanced data augmentation pipeline (pitch shifting, time stretching, noise injection, SpecAugment) tailored for SER
+- Lightweight CNN architecture achieving competitive accuracy with sub-100ms inference latency
+- Speaker-independent evaluation on RAVDESS and CREMA-D datasets
+- Analysis of augmentation impact on cross-speaker generalization

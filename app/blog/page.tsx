@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Calendar } from "lucide-react";
 import { blogPosts } from "@/data/blog";
+
+export const metadata: Metadata = {
+  title: "Blog",
+  description: "Technical notes, implementation write-ups, and research reflections on distributed ML, agentic AI, deep learning, and MLOps by Shreyansh Shakya.",
+};
 
 export default function BlogIndexPage() {
   return (

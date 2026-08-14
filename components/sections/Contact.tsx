@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Mail, ExternalLink, Code2 } from "lucide-react";
 import Link from "next/link";
 import { social } from "@/data/social";
@@ -24,15 +24,17 @@ const contactLinks = [
 ];
 
 export function Contact() {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
-    <section id="contact" className="py-32 relative">
+    <section id="contact" className="py-20 sm:py-24 relative border-t border-border">
       <div className="container mx-auto px-6 text-center">
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-4xl md:text-5xl font-heading font-bold text-foreground mb-12"
+          transition={{ duration: shouldReduceMotion ? 0 : 0.6 }}
+          className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-foreground mb-10 sm:mb-12"
         >
           Let&apos;s build something.
         </motion.h2>
@@ -41,8 +43,8 @@ export function Contact() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex justify-center gap-8"
+          transition={{ duration: shouldReduceMotion ? 0 : 0.6, delay: shouldReduceMotion ? 0 : 0.2 }}
+          className="flex flex-col sm:flex-row justify-center gap-6 sm:gap-8"
         >
           {contactLinks.map((link) => (
             <Link

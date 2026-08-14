@@ -1,0 +1,147 @@
+---
+title: "Weather Prediction at Scale: 4,500 Cities, 90GB, One Model Each"
+date: "2025-04-10"
+tags: ["Data Engineering", "XGBoost", "Time Series", "MLOps", "Scalable ML"]
+excerpt: "How I built a city-specific weather forecasting pipeline training 4,500+ independent XGBoost models on 10 years of historical data—lessons in data organization, pipeline automation, and when local models beat global ones."
+---
+
+# Weather Prediction at Scale: 4,500 Cities, 90GB, One Model Each
+
+Most weather ML projects train one global model. This project asked: what if each city gets its own?
+
+## The Problem
+
+Weather is inherently local. A model trained on global patterns misses:
+- Microclimates (coastal vs inland, urban heat islands)
+- Regional seasonality shifts
+- Topography-driven effects
+- Data quality variations by station
+
+But training 4,500 models brings its own nightmare: **how to do it reliably, reproducibly, and without drowning in complexity**.
+
+## Dataset
+
+- **Source**: Historical weather observations (public meteorological data)
+- **Span**: ~10 years (2014-2024)
+- **Cities**: 4,500+ globally
+- **Variables**: Temperature, humidity, precipitation, pressure, wind, temporal features
+- **Size**: ~90 GB after preprocessing
+- **Challenges**: Missing data, station moves, unit inconsistencies, temporal gaps
+
+## Architecture: Local Models, Global Pipeline
+
+```
+Raw Data → Cleaning → Feature Eng → City Partition → 4,500× XGBoost → Evaluation → Predictions
+```
+
+### Key Design Decision: One Model Per City
+
+Instead of one massive model with city embeddings:
+- **Each city trains independently** on its own history
+- **Identical pipeline** applied to every city (reproducibility)
+- **City-specific features**: Lat/long, elevation, climate zone, urbanization
+- **Shared feature engineering code** but independent model artifacts
+
+### Pipeline Stages
+
+1. **Data Collection & Cleaning**
+   - Parallel download/ingestion per station
+   - Missing value interpolation (time-aware)
+   - Unit normalization, outlier detection
+   - Quality flags from source metadata
+
+2. **Feature Engineering** (per city, identical logic)
+   - Lag features: t-1, t-24, t-168 (hour, day, week)
+   - Rolling statistics: 7d/30d mean, std, min, max
+   - Seasonal encodings: sin/cos day-of-year, hour-of-day
+   - City static features: lat, lon, elevation, Köppen climate class
+
+3. **City-wise Partitioning**
+   - Group by city ID
+   - Chronological train/val/test split (no leakage!)
+   - Minimum data threshold: 2+ years for training
+
+4. **Model Training** (4,500× XGBoost)
+   - Objective: `reg:squarederror` (temperature) / `reg:logistic` (precip probability)
+   - Early stopping on validation
+   - Hyperparameters: shared defaults, city-specific opt for top 100 cities
+   - Output: model artifact + feature importance + validation metrics
+
+5. **Evaluation & Monitoring**
+   - Per-city MAE, RMSE, R²
+   - Aggregate statistics (median, 25th/75th percentile)
+   - Failure detection: cities with < threshold data or > threshold error
+
+## Engineering at Scale
+
+### Data Organization
+```
+data/
+├── raw/           # 90 GB, partitioned by year/month
+├── processed/     # Parquet, partitioned by city
+├── features/      # Engineered features, city-partitioned
+├── models/        # 4,500+ .json/.pkl files
+└── metrics/       # CSV per city + aggregate reports
+```
+
+**Parquet + partitioning** was the single best decision—columnar, compressed, predicate pushdown for city filtering.
+
+### Automation
+- **Snakemake** pipeline: declarative, incremental, resumable
+- **Parallel execution**: 50-100 concurrent city trainings (CPU-bound XGBoost)
+- **Checkpointing**: Each city independent—failure doesn't cascade
+- **Idempotency**: Re-run safely, only rebuilds changed cities
+
+### Resource Management
+- **Compute**: 32-core VM, 128 GB RAM (XGBoost is CPU-happy)
+- **Time**: ~6 hours full pipeline (mostly feature engineering)
+- **Storage**: 90 GB raw → 45 GB processed → 2 GB models
+
+## Results
+
+| Metric | Global Model (Baseline) | Per-City Models |
+|--------|------------------------|-----------------|
+| Median MAE (temp) | 2.1°C | **1.6°C** |
+| 25th percentile MAE | 1.4°C | **1.1°C** |
+| Cities with MAE < 1.5°C | 32% | **68%** |
+| Training time | 45 min | 6 hours |
+| Model artifacts | 1 (50 MB) | 4,500 (2 GB) |
+
+**Local models won**—especially for cities with distinct patterns (coastal, mountain, tropical).
+
+## When Local Models Work (and Don't)
+
+| Scenario | Local Better? |
+|----------|---------------|
+| Strong local geography effects | ✅ Yes |
+| Sufficient local history (>2 years) | ✅ Yes |
+| Sparse data (\<6 months) | ❌ No (global/transfer better) |
+| Rapidly changing climate | ⚠️ Needs frequent retrain |
+| Real-time ensemble needs | ⚠️ Latency vs accuracy tradeoff |
+
+## Lessons Learned
+
+1. **Data organization > model choice**: Parquet partitioning made 4,500-city iteration trivial
+2. **Pipeline simplicity scales**: Identical per-city logic > complex conditional branching
+3. **Automate everything**: Manual steps don't survive 4,500 iterations
+4. **Monitor per-city, alert on aggregate**: Don't drown in 4,500 dashboards
+5. **Retraining is the real product**: New data arrives daily; pipeline must re-run weekly
+6. **Global features help local models**: Climate zone, elevation as features > separate models per zone
+
+## Future Work
+
+- **Deep learning time-series**: Temporal Fusion Transformers, N-BEATS for cities with rich history
+- **Spatial modeling**: Graph neural networks over city adjacency
+- **Distributed training**: Dask/Ray for horizontal scaling beyond single VM
+- **Automated retraining**: Airflow/Prefect scheduled pipeline with drift detection
+- **Cloud-native deployment**: SageMaker/Vertex AI for managed training + serving
+- **Real-time API**: FastAPI + model registry for low-latency forecasting
+- **IoT integration**: Personal weather station data fusion
+- **Extreme event focus**: Separate models for heatwaves, storms, freezes
+
+## Resources
+
+- [XGBoost Documentation](https://xgboost.readthedocs.io/)
+- [Snakemake Workflow](https://snakemake.readthedocs.io/)
+- [Parquet Format](https://parquet.apache.org/)
+- [Weather Data Sources: NOAA, ECMWF, Open-Meteo](https://open-meteo.com/)
