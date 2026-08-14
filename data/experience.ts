@@ -24,7 +24,7 @@ export const experience = [
   },
   {
     year: "2026",
-    title: "Team Lead - Optimus: Autonomous EnergyPlus Building Controller (Solo Project)",
+    title: "Optimus: Autonomous EnergyPlus Building Controller",
     org: "Honeywell Campus Connect Hackathon",
     description: [
       "Designed safety-constrained physical-AI controller for autonomous building operations using EnergyPlus simulation",

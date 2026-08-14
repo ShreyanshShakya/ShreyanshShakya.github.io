@@ -49,7 +49,7 @@ export function Timeline() {
                   <div
                     className={`ml-12 md:ml-0 md:w-[45%] ${
                       isLeft
-                        ? "md:mr-auto md:pr-12 md:text-right"
+                        ? "md:mr-auto md:pr-12"
                         : "md:ml-auto md:pl-12"
                     }`}
                   >
@@ -62,15 +62,9 @@ export function Timeline() {
                     <p className="text-sm text-accent/80 font-medium mb-2">
                       {item.org}
                     </p>
-                    <ul
-                      className={`text-secondary text-sm space-y-1.5 leading-relaxed ${
-                        isLeft
-                          ? "md:list-none md:pl-0"
-                          : "list-disc list-inside"
-                      }`}
-                    >
+                    <ul className="text-secondary text-sm space-y-1.5 leading-relaxed list-disc ml-4">
                       {description.map((desc, idx) => (
-                        <li key={idx} className="leading-relaxed">
+                        <li key={idx} className="leading-relaxed pl-1">
                           {desc}
                         </li>
                       ))}
