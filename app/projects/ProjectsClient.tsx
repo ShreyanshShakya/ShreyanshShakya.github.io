@@ -55,7 +55,7 @@ export function ProjectsClient() {
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </div>
-                <div className="w-full md:w-1/3 aspect-4/3 rounded-lg border border-border/50 bg-background p-3">
+                <div className="w-full md:w-1/3 aspect-[4/3] rounded-lg border border-border/50 bg-background p-3 shrink-0">
                   <ArchitectureDiagram projectId={project.id} isHovered={false} />
                 </div>
               </div>

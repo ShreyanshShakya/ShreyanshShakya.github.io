@@ -45,9 +45,9 @@ export function ProjectCard({ project }: ProjectCardProps) {
             <div className="absolute -inset-px bg-linear-to-r from-accent/50 to-transparent rounded-2xl z-0 blur-sm" />
           </div>
 
-          <div className="relative z-10 p-6 md:p-8 bg-card rounded-2xl">
+          <div className="relative z-10 p-6 md:p-8 bg-card rounded-2xl flex flex-col md:flex-row gap-6 md:gap-8 items-start">
             {/* Architecture Diagram - on top on mobile, side by side on desktop */}
-            <div className="md:order-2 mb-6 md:mb-0 md:w-2/5 aspect-4/3 rounded-xl overflow-hidden bg-background relative border border-border/50 p-3">
+            <div className="md:order-2 mb-0 md:w-2/5 aspect-[4/3] rounded-xl overflow-hidden bg-background relative border border-border/50 p-3 shrink-0">
               <ArchitectureDiagram
                 projectId={project.id}
                 isHovered={isHovered}
