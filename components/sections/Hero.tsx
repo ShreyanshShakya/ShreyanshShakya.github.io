@@ -85,8 +85,8 @@ export function Hero() {
             {[
               { value: "7", label: "Engineering case studies" },
               { value: "4,300+", label: "Cities modeled" },
-              { value: "10 Years", label: "Weather data span" },
-              { value: "5+", label: "ML frameworks used" },
+              { value: "90 GB", label: "Largest dataset processed" },
+              { value: "3", label: "Deep learning projects" },
             ].map((stat) => (
               <div
                 key={stat.label}
