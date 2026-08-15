@@ -1,10 +1,3 @@
----
-title: "Why Distributed Training Still Bottlenecks at Scale"
-date: "2026-07-15"
-tags: ["Distributed Systems", "PyTorch", "ML Infra"]
-excerpt: "A practical look at gradient synchronization, communication overlap, and the hidden costs of scaling PyTorch DDP. Based on building a distributed ML training framework for heterogeneous consumer hardware."
----
-
 Distributed data-parallel training is attractive because it is easy to understand: split the batch, run the backward pass on each worker, synchronize gradients, and update the model.
 
 The problem is that synchronization is not free. Once a model grows large enough, the network becomes the real bottleneck, not the GPU.
