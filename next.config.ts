@@ -1,6 +1,5 @@
 import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
-import remarkGfm from "remark-gfm";
 
 const nextConfig: NextConfig = {
   output: "export",
@@ -14,7 +13,9 @@ const nextConfig: NextConfig = {
 
 const withMDX = createMDX({
   options: {
-    remarkPlugins: [remarkGfm],
+    // Turbopack requires plugin names to be serializable strings.
+    // remark-gfm enables Markdown tables, task lists, strikethrough, etc.
+    remarkPlugins: ["remark-gfm"],
   },
 });
 
