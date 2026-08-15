@@ -16,6 +16,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return { title: "Post Not Found" };
   }
 
+  const siteUrl = "https://shreyanshshakya.github.io";
+
   return {
     title: post.title,
     description: post.excerpt,
@@ -25,11 +27,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: "article",
       publishedTime: post.date,
       tags: post.tags,
+      images: [
+        {
+          url: `${siteUrl}/og-image.png`,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
+      images: [`${siteUrl}/og-image.png`],
     },
   };
 }
@@ -48,8 +59,37 @@ export default async function BlogPostPage({
 
   const PostContent = post.component;
 
+  const siteUrl = "https://shreyanshshakya.github.io";
+
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    author: {
+      "@type": "Person",
+      name: "Shreyansh Shakya",
+      url: siteUrl,
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Shreyansh Shakya",
+      url: siteUrl,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${siteUrl}/blog/${post.slug}`,
+    },
+  };
+
   return (
-    <article className="container mx-auto px-6 py-24 max-w-4xl">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema, null, 2) }}
+      />
+      <article className="container mx-auto px-6 py-24 max-w-4xl">
       <Link href="/blog" className="inline-flex items-center gap-2 text-sm text-secondary hover:text-foreground transition-colors mb-10">
         <ArrowLeft className="w-4 h-4" />
         Back to Blog
@@ -72,5 +112,6 @@ export default async function BlogPostPage({
         <PostContent />
       </div>
     </article>
+    </>
   );
 }

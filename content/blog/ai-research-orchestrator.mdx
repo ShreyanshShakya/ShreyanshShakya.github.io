@@ -2,12 +2,10 @@
 title: "AI Research Orchestrator: Multi-Agent Literature Synthesis"
 date: "2025-07-20"
 tags: ["Multi-Agent Systems", "Research Engineering", "LLMs", "TypeScript", "Semantic Scholar", "OpenAlex"]
-excerpt: "An autonomous research assistant that plans literature reviews, retrieves papers from academic APIs, analyzes findings, and generates structured reports—built as a modular multi-agent system in TypeScript."
+excerpt: "An autonomous research assistant that plans literature reviews, retrieves papers from academic APIs, analyzes findings, and generates structured reports—built as a modular multi-agent system in TypeScript with production and offline modes."
 ---
 
-# AI Research Orchestrator: Multi-Agent Literature Synthesis
-
-Researchers spend 40%+ of time on literature workflows: search → filter → read → synthesize → write. This project automates that pipeline with specialized agents.
+Literature review workflows involve repeated search, filtering, reading, synthesis, and citation verification steps. This project automates that pipeline with specialized agents.
 
 ## The Problem
 
@@ -18,6 +16,22 @@ Traditional LLM research assistants fail because:
 - **No traceability** (can't verify claims against sources)
 
 The Orchestrator solves this with **modular agents + real academic APIs**.
+
+## Two Operating Modes
+
+### Production / Integration Mode
+- **Semantic Scholar API** (with/without key for higher rate limits)
+- **OpenAlex API** (generous 100k req/day)
+- Real paper retrieval, deduplication, and analysis
+- Full pipeline with live data
+
+### Offline Demonstration Mode
+- **Deterministic mock responses** per research domain
+- **Pre-cached paper sets** for common topics
+- Full pipeline runs without network connectivity
+- Enables development, demos, CI/CD without API keys
+
+Both modes execute the identical agent pipeline—only the retrieval layer differs.
 
 ## Architecture
 
@@ -86,7 +100,9 @@ Report Generator → Structured technical report + references
   - Pre-cached paper sets for common topics
   - Full pipeline runs without network
 
-## Workflow Example
+## Illustrative Workflow Example
+
+> **Note**: The following is an **illustrative run** from the offline demonstration mode with pre-cached data. It demonstrates the pipeline flow but does not represent live API results.
 
 **Input**: "Compare transformer architectures for long-context language modeling"
 
@@ -100,7 +116,7 @@ Report Generator → Structured technical report + references
 }
 ```
 
-**Retriever**: Fetches 150 papers → dedupes to 89 → ranks → top 25
+**Retriever (Illustrative)**: Fetches 150 papers → dedupes to 89 → ranks → top 25
 
 **Analyzer** (per paper): Extracts architecture variant, context length, perplexity, hardware, training cost
 
@@ -108,7 +124,7 @@ Report Generator → Structured technical report + references
 
 **Reporter**: Generates 12-page report with tables, citations, gaps, future work
 
-## Results
+## Capabilities Status
 
 | Capability | Status |
 |------------|--------|
@@ -148,6 +164,12 @@ Report Generator → Structured technical report + references
 - **Multi-modal papers**: Figures, tables, supplementary materials
 - **Citation graph analysis**: Influence mapping, cluster detection
 - **Real-time literature monitoring**: Alerts on new relevant papers
+
+## Related Project
+
+This blog post accompanies the **AI Research Orchestrator** project case study (also known as **Aster**).
+
+[**View Project Case Study →**](/projects/ai-research-orchestrator)
 
 ## Resources
 

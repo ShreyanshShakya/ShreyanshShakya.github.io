@@ -5,8 +5,6 @@ tags: ["EnergyPlus", "Physical AI", "Building Control", "Ollama", "Qwen", "Strea
 excerpt: "A safety-constrained physical-AI controller for autonomous building operations. Uses EnergyPlus simulation with PyEnergyPlus API, local LLM (Ollama/Qwen) or deterministic fallback for bounded planning, and hard safety validation before schedule override injection."
 ---
 
-# Optimus: Autonomous EnergyPlus Building Controller
-
 Building HVAC control typically relies on fixed schedules or reactive thermostats. Optimus is a **safety-constrained physical-AI controller** that observes live EnergyPlus simulation state, plans bounded supervisory actions via local LLM or deterministic fallback, validates safety constraints, and injects approved schedule overrides — all with full auditability.
 
 ## The Problem
@@ -120,6 +118,12 @@ Opens Streamlit at `http://localhost:8501`. Docker installs EnergyPlus 26.1.0. O
 - ❌ **Autonomous without qualification** — prototype with defined safety boundaries
 - ❌ **Guaranteed energy savings** — savings are model-dependent; correctly reports no-opportunity cases
 - ❌ **Parameter server / distributed training** — this is a *simulation control loop*, not distributed ML
+
+## Related Project
+
+This blog post accompanies the **Optimus: Autonomous EnergyPlus Building Controller** project case study.
+
+[**View Project Case Study →**](/projects/optimus)
 
 ## Resources
 

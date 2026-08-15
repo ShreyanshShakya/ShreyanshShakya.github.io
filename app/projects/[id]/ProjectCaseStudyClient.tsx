@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft, ExternalLink, Code2 } from "lucide-react";
 import { ArchitectureDiagram } from "@/components/ui/ArchitectureDiagram";
+import { architectures } from "@/data/architectures";
 
 interface ProjectCaseStudyClientProps {
   project: {
@@ -18,6 +19,7 @@ interface ProjectCaseStudyClientProps {
     challenges: string[];
     benchmarks: string;
     lessons: string[];
+    relatedProjects?: string[];
   };
 }
 
@@ -97,6 +99,26 @@ export function ProjectCaseStudyClient({ project }: ProjectCaseStudyClientProps)
                 </Link>
               )}
             </div>
+
+            {/* Related Projects */}
+            {project.relatedProjects && project.relatedProjects.length > 0 && (
+              <div className="mt-8">
+                <h3 className="text-sm text-secondary uppercase tracking-widest font-mono mb-4">
+                  Related Projects
+                </h3>
+                <div className="flex flex-wrap gap-3">
+                  {project.relatedProjects.map((relatedId) => (
+                    <Link
+                      key={relatedId}
+                      href={`/projects/${relatedId}`}
+                      className="px-3 py-1.5 rounded-lg border border-border bg-card text-sm text-secondary hover:text-foreground hover:border-accent/30 hover:bg-accent/5 transition-colors"
+                    >
+                      {relatedId.replace(/-/g, ". ")}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Right Column - Architecture Diagram */}
@@ -112,6 +134,11 @@ export function ProjectCaseStudyClient({ project }: ProjectCaseStudyClientProps)
                 SYSTEM ARCHITECTURE
               </h2>
               <ArchitectureDiagram projectId={project.id} isHovered={true} />
+              {architectures[project.id]?.footer && (
+                <p className="mt-4 text-sm text-secondary/80 font-mono leading-relaxed">
+                  {architectures[project.id].footer}
+                </p>
+              )}
             </motion.div>
           </div>
         </div>

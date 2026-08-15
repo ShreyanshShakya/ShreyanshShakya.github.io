@@ -2,10 +2,8 @@
 title: "AgentForge: Multi-Agent Software Engineering with Local LLMs"
 date: "2025-11-01"
 tags: ["Agentic AI", "Multi-Agent", "Local LLMs", "Ollama", "Software Engineering"]
-excerpt: "Building a local-first multi-agent coding assistant where specialized agents (Analyst, Architect, Planner, Critic, Consensus) collaborate on software tasks—running entirely on your machine with Ollama."
+excerpt: "Building a local-first multi-agent coding assistant where specialized agents (Analyst, Architect, Planner, Critic, Consensus) collaborate on software tasks—running entirely on your machine with Ollama. Focus on role specialization, structured intermediates, and local execution."
 ---
-
-# AgentForge: Multi-Agent Software Engineering with Local LLMs
 
 Most coding assistants are single-model chat interfaces. AgentForge asks: what if we decompose software engineering into specialized roles, each with its own agent?
 
@@ -66,8 +64,6 @@ Each agent:
 - `codellama:13b` - Specialized for code
 - `gpt-oss:20b` - Open weights, strong general reasoning
 
-**Quantization trade-off**: `q4_K_M` (4-bit) = 70% quality, 25% VRAM
-
 ## Implementation
 
 ### Agent Base Class
@@ -105,7 +101,7 @@ class AgentForge:
 ### Caching Strategy
 - **Input hashing**: Cache key = hash(agent_name + relevant_context)
 - **Invalidation**: Clear on request change or model switch
-- **Saves 40-60% latency** on iterative refinement
+- **Observed**: Substantial latency reduction on iterative refinement
 
 ## Key Engineering Challenges
 
@@ -142,22 +138,24 @@ class AgentForge:
 - Caching as above
 - Smaller models for simpler agents (Analyst: 7B, Architect: 14B)
 
-## Results
+## Development Findings
 
-**Qualitative findings from development and testing:**
+> **Note**: The following are **qualitative observations from development and testing**, not controlled experimental results with defined baselines, multiple runs, or statistical significance.
 
-| Aspect | Observation |
-|--------|-------------|
-| **Code quality** | Comparable to single-agent GPT-4 for structured tasks; local models (7B-14B) viable for coding, review, planning |
-| **Requirement coverage** | Multi-agent decomposition improved coverage of edge cases and acceptance criteria vs single-pass |
-| **Security review** | Critic agent caught issues (hallucinated APIs, missing auth checks) that single-model missed |
-| **Privacy** | ✅ Fully local — code never leaves machine |
-| **Cost** | $0.00 per task (local inference) vs ~$0.50/task for GPT-4 API |
-| **Latency** | 35s sequential (5 agents); ~12s with caching on iterative refinement |
+### Role Specialization
+Separating analysis, architecture, planning, and critique made individual reasoning stages easier to inspect and debug. Each agent's output could be independently validated.
 
-**Key finding**: Critic agent catches issues (hallucinated APIs, missing edge cases) that single-model generation misses — separation of concerns works.
+### Structured Intermediate State
+Passing structured representations (JSON) between agents reduced loss of requirements between stages and enabled programmatic validation at each boundary.
 
-> **Note**: Numerical benchmarks above are indicative observations from development testing, not controlled experimental results. Controlled evaluation with defined baselines, multiple runs, and statistical significance is future work.
+### Critic Agent Effectiveness
+The Critic agent caught issues (hallucinated APIs, missing auth checks, incomplete error handling) that single-model generation missed — separation of concerns works for review tasks.
+
+### Local Execution
+Ollama enabled the workflow to operate without sending source code to an external inference API. Privacy-sensitive codebases can be processed entirely locally.
+
+### Caching Impact
+Caching repeated agent computations substantially reduced unnecessary inference during iterative refinement. Second and subsequent iterations felt near-instant for unchanged pipeline stages.
 
 ## Lessons Learned
 
@@ -179,8 +177,15 @@ class AgentForge:
 - **IDE integration**: VS Code extension, JetBrains plugin
 - **Team workspace**: Shared memory, collaborative agent runs
 
+## Related Project
+
+This blog post accompanies the **AgentForge** project case study.
+
+[**View Project Case Study →**](/projects/agentforge)
+
 ## Resources
 
+- [GitHub: AgentForge](https://github.com/ShreyanshShakya/agentforge)
 - [Ollama](https://ollama.ai/)
 - [Qwen Models](https://github.com/QwenLM/Qwen)
 - [GPT-OSS](https://github.com/openai/gpt-oss)

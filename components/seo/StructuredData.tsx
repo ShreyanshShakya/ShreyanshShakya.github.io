@@ -1,6 +1,7 @@
 "use client";
 
 import { social } from "@/data/social";
+import { featuredProjects } from "@/data/projects";
 
 const siteUrl = "https://shreyanshshakya.github.io";
 
@@ -42,80 +43,42 @@ const webSiteSchema = {
     "@type": "Person",
     name: "Shreyansh Shakya",
   },
-  potentialAction: {
-    "@type": "SearchAction",
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: `${siteUrl}/search?q={search_term_string}`,
-    },
-    "query-input": "required name=search_term_string",
-  },
 };
 
-const projects = [
-  {
-    name: "Distributed ML Training Framework (DMLF)",
-    description: "A distributed training framework orchestrating heterogeneous compute nodes over LAN using PyTorch DDP with automated node management, scheduling, and telemetry.",
-    url: "https://shreyanshshakya.github.io/projects/distributed-ml-framework",
-    programmingLanguage: "Python",
-    applicationCategory: "DeveloperApplication",
-    operatingSystem: "Linux, Windows, macOS",
-  },
-  {
-    name: "Aster — AI Research Orchestrator",
-    description: "An autonomous multi-agent research system that plans literature reviews, retrieves academic papers, synthesizes findings, and generates structured reports.",
-    url: "https://shreyanshshakya.github.io/projects/autonomous-agents",
-    programmingLanguage: "TypeScript",
-    applicationCategory: "DeveloperApplication",
-    operatingSystem: "Linux, Windows, macOS",
-  },
-  {
-    name: "AgentForge",
-    description: "A local multi-agent software engineering assistant where specialized AI agents collaborate to analyze requirements, design solutions, and produce implementation plans.",
-    url: "https://shreyanshshakya.github.io/projects/agentforge",
-    programmingLanguage: "Python",
-    applicationCategory: "DeveloperApplication",
-    operatingSystem: "Linux, Windows, macOS",
-  },
-  {
-    name: "Optimus — Autonomous EnergyPlus Building Controller",
-    description: "A safety-constrained physical-AI controller for autonomous building operations using EnergyPlus simulation with local LLM or deterministic fallback.",
-    url: "https://shreyanshshakya.github.io/projects/optimus",
-    programmingLanguage: "Python",
-    applicationCategory: "DeveloperApplication",
-    operatingSystem: "Linux, Docker",
-  },
-  {
-    name: "Brain MRI Tumor Segmentation",
-    description: "3D medical image segmentation using BraTS dataset with Attention U-Net and EfficientNet encoder achieving 0.8256 validation Dice.",
-    url: "https://shreyanshshakya.github.io/projects/brain-mri-segmentation",
-    programmingLanguage: "Python",
-    applicationCategory: "MedicalApplication",
-    operatingSystem: "Linux, Windows, macOS",
-  },
-  {
-    name: "Weather Prediction at Scale",
-    description: "City-specific weather forecasting pipeline training 4,300+ independent XGBoost models on 90GB historical data across 10 years.",
-    url: "https://shreyanshshakya.github.io/projects/weather-prediction",
-    programmingLanguage: "Python",
-    applicationCategory: "DataAnalysisApplication",
-    operatingSystem: "Linux, Windows, macOS",
-  },
-];
+function getAppCategory(tags: string[]): string {
+  if (tags.some(t => t.includes("Medical") || t.includes("BraTS") || t.includes("MRI"))) return "MedicalApplication";
+  if (tags.some(t => t.includes("Weather") || t.includes("Time Series") || t.includes("XGBoost"))) return "DataAnalysisApplication";
+  if (tags.some(t => t.includes("Speech") || t.includes("Emotion") || t.includes("Audio"))) return "MultimediaApplication";
+  if (tags.some(t => t.includes("Physical") || t.includes("EnergyPlus") || t.includes("Building"))) return "EngineeringApplication";
+  return "DeveloperApplication";
+}
 
-const softwareApplicationsSchema = projects.map((project) => ({
+function getOS(tags: string[]): string {
+  if (tags.some(t => t.includes("Docker"))) return "Linux, Docker";
+  if (tags.some(t => t.includes("Linux") || t.includes("macOS") || t.includes("Windows"))) return "Linux, Windows, macOS";
+  return "Linux, Windows, macOS";
+}
+
+function getLanguage(tags: string[]): string {
+  if (tags.some(t => t.includes("Python") || t.includes("PyTorch") || t.includes("XGBoost"))) return "Python";
+  if (tags.some(t => t.includes("TypeScript") || t.includes("Node.js"))) return "TypeScript";
+  if (tags.some(t => t.includes("TensorFlow"))) return "Python";
+  return "Python";
+}
+
+const projectsSchema = featuredProjects.map((project) => ({
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: project.name,
+  name: project.title,
   description: project.description,
-  url: project.url,
-  programmingLanguage: project.programmingLanguage,
-  applicationCategory: project.applicationCategory,
-  operatingSystem: project.operatingSystem,
+  url: `${siteUrl}${project.link}`,
+  programmingLanguage: getLanguage(project.tags),
+  applicationCategory: getAppCategory(project.tags),
+  operatingSystem: getOS(project.tags),
   author: {
     "@type": "Person",
     name: "Shreyansh Shakya",
-    url: "https://shreyanshshakya.github.io",
+    url: siteUrl,
   },
   offers: {
     "@type": "Offer",
@@ -128,7 +91,7 @@ export function StructuredData() {
   const schemas = [
     personSchema,
     webSiteSchema,
-    ...softwareApplicationsSchema,
+    ...projectsSchema,
   ];
 
   return (

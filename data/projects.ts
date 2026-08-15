@@ -27,34 +27,7 @@ export const featuredProjects = [
     ],
     github: "https://github.com/ShreyanshShakya/Distributed-ML-Training",
     demo: "",
-  },
-  {
-    id: "autonomous-agents",
-    title: "AI Research Orchestrator / Multi-Agent Research Scientist",
-    description:
-      "Developed an autonomous multi-agent research system that plans literature reviews, retrieves academic papers, synthesizes findings, and generates structured research reports.",
-    tags: ["Node.js", "TypeScript", "Semantic Scholar", "OpenAlex", "LLMs", "Agent Orchestration"],
-    link: "/projects/autonomous-agents",
-    problem:
-      "Research workflows are fragmented across search, ranking, reading, and synthesis. The goal was to coordinate those steps into a repeatable agent-driven system.",
-    architecture:
-      "Planner, analyst, architect, critic, and consensus stages coordinate paper retrieval, citation analysis, literature summaries, and structured report generation.",
-    challenges: [
-      "API rate limiting",
-      "Paper ranking",
-      "Agent orchestration",
-      "Tool abstraction",
-      "Offline execution mode",
-    ],
-    benchmarks:
-      "Built research planning, paper retrieval, citation analysis, structured reports, and literature summary flows using external academic data sources and LLM-driven orchestration.",
-    lessons: [
-      "Specialized agents make research workflows easier to reason about",
-      "Consensus steps are useful when synthesis needs to be grounded in sources",
-      "Tool boundaries matter when mixing retrieval, ranking, and writing",
-    ],
-    github: "https://github.com/ShreyanshShakya/Aster",
-    demo: "",
+    relatedProjects: ["ai-research-orchestrator", "agentforge", "optimus"],
   },
   {
     id: "agentforge",
@@ -85,6 +58,7 @@ export const featuredProjects = [
     ],
     github: "https://github.com/ShreyanshShakya/agentforge",
     demo: "",
+    relatedProjects: ["distributed-ml-framework", "ai-research-orchestrator", "optimus"],
   },
   {
     id: "optimus",
@@ -116,6 +90,7 @@ export const featuredProjects = [
     ],
     github: "https://github.com/ShreyanshShakya/Optimus",
     demo: "",
+    relatedProjects: ["distributed-ml-framework", "agentforge", "ai-research-orchestrator"],
   },
   {
     id: "brain-mri-segmentation",
@@ -145,6 +120,7 @@ export const featuredProjects = [
     ],
     github: "https://github.com/ShreyanshShakya/Brain-Tumor-Segmentation-using-3D-U-Net-Architectures",
     demo: "",
+    relatedProjects: ["speech-emotion-recognition", "distributed-ml-framework"],
   },
   {
     id: "weather-prediction",
@@ -174,6 +150,7 @@ export const featuredProjects = [
     ],
     github: "https://github.com/ShreyanshShakya/Weather-Prediction",
     demo: "",
+    relatedProjects: ["distributed-ml-framework", "agentforge"],
   },
   {
     id: "speech-emotion-recognition",
@@ -204,6 +181,7 @@ export const featuredProjects = [
     ],
     github: "https://github.com/ShreyanshShakya/Speech-Emotion-Recognition",
     demo: "",
+    relatedProjects: ["brain-mri-segmentation", "agentforge", "ai-research-orchestrator"],
   },
   {
     id: "ai-research-orchestrator",
@@ -232,5 +210,6 @@ export const featuredProjects = [
     ],
     github: "https://github.com/ShreyanshShakya/Aster",
     demo: "",
+    relatedProjects: ["distributed-ml-framework", "agentforge", "optimus"],
   },
 ];

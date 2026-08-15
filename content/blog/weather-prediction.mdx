@@ -1,11 +1,9 @@
 ---
-title: "Weather Prediction at Scale: 4,500 Cities, 90GB, One Model Each"
+title: "Weather Prediction at Scale: 4,300+ Cities, 90GB, One Model Each"
 date: "2025-04-10"
 tags: ["Data Engineering", "XGBoost", "Time Series", "MLOps", "Scalable ML"]
-excerpt: "How I built a city-specific weather forecasting pipeline training 4,500+ independent XGBoost models on 10 years of historical data—lessons in data organization, pipeline automation, and when local models beat global ones."
+excerpt: "How I built a city-specific weather forecasting pipeline training 4,300+ independent XGBoost models on 10 years of historical data—lessons in data organization, pipeline automation, and when local models beat global ones."
 ---
-
-# Weather Prediction at Scale: 4,500 Cities, 90GB, One Model Each
 
 Most weather ML projects train one global model. This project asked: what if each city gets its own?
 
@@ -17,13 +15,13 @@ Weather is inherently local. A model trained on global patterns misses:
 - Topography-driven effects
 - Data quality variations by station
 
-But training 4,500 models brings its own nightmare: **how to do it reliably, reproducibly, and without drowning in complexity**.
+But training 4,300+ models brings its own nightmare: **how to do it reliably, reproducibly, and without drowning in complexity**.
 
 ## Dataset
 
 - **Source**: Historical weather observations (public meteorological data)
 - **Span**: ~10 years (2014-2024)
-- **Cities**: 4,500+ globally
+- **Cities**: 4,300+ globally
 - **Variables**: Temperature, humidity, precipitation, pressure, wind, temporal features
 - **Size**: ~90 GB after preprocessing
 - **Challenges**: Missing data, station moves, unit inconsistencies, temporal gaps
@@ -31,7 +29,7 @@ But training 4,500 models brings its own nightmare: **how to do it reliably, rep
 ## Architecture: Local Models, Global Pipeline
 
 ```
-Raw Data → Cleaning → Feature Eng → City Partition → 4,500× XGBoost → Evaluation → Predictions
+Raw Data → Cleaning → Feature Eng → City Partition → 4,300+× XGBoost → Evaluation → Predictions
 ```
 
 ### Key Design Decision: One Model Per City
@@ -61,7 +59,7 @@ Instead of one massive model with city embeddings:
    - Chronological train/val/test split (no leakage!)
    - Minimum data threshold: 2+ years for training
 
-4. **Model Training** (4,500× XGBoost)
+4. **Model Training** (4,300+× XGBoost)
    - Objective: `reg:squarederror` (temperature) / `reg:logistic` (precip probability)
    - Early stopping on validation
    - Hyperparameters: shared defaults, city-specific opt for top 100 cities
@@ -75,29 +73,34 @@ Instead of one massive model with city embeddings:
 ## Engineering at Scale
 
 ### Data Organization
+
 ```
 data/
 ├── raw/           # 90 GB, partitioned by year/month
 ├── processed/     # Parquet, partitioned by city
 ├── features/      # Engineered features, city-partitioned
-├── models/        # 4,500+ .json/.pkl files
+├── models/        # 4,300+ .json/.pkl files
 └── metrics/       # CSV per city + aggregate reports
 ```
 
 **Parquet + partitioning** was the single best decision—columnar, compressed, predicate pushdown for city filtering.
 
 ### Automation
+
 - **Snakemake** pipeline: declarative, incremental, resumable
 - **Parallel execution**: 50-100 concurrent city trainings (CPU-bound XGBoost)
 - **Checkpointing**: Each city independent—failure doesn't cascade
 - **Idempotency**: Re-run safely, only rebuilds changed cities
 
-### Resource Management
+### Resource Profile (Development Environment)
+
+> **Note**: The following reflects the development/experimental environment used during this project. Production deployments would use different infrastructure.
+
 - **Compute**: 32-core VM, 128 GB RAM (XGBoost is CPU-happy)
 - **Time**: ~6 hours full pipeline (mostly feature engineering)
 - **Storage**: 90 GB raw → 45 GB processed → 2 GB models
 
-## Results
+## Results (Development Measurements)
 
 | Metric | Global Model (Baseline) | Per-City Models |
 |--------|------------------------|-----------------|
@@ -105,7 +108,9 @@ data/
 | 25th percentile MAE | 1.4°C | **1.1°C** |
 | Cities with MAE < 1.5°C | 32% | **68%** |
 | Training time | 45 min | 6 hours |
-| Model artifacts | 1 (50 MB) | 4,500 (2 GB) |
+| Model artifacts | 1 (50 MB) | 4,300+ (2 GB) |
+
+> **Disclaimer**: The numerical results above are **development measurements** from the experimental pipeline run, not controlled benchmark results with statistical validation. They demonstrate the directional improvement of the local-model approach but should not be cited as formal benchmarks.
 
 **Local models won**—especially for cities with distinct patterns (coastal, mountain, tropical).
 
@@ -121,10 +126,10 @@ data/
 
 ## Lessons Learned
 
-1. **Data organization > model choice**: Parquet partitioning made 4,500-city iteration trivial
+1. **Data organization > model choice**: Parquet partitioning made 4,300-city iteration trivial
 2. **Pipeline simplicity scales**: Identical per-city logic > complex conditional branching
-3. **Automate everything**: Manual steps don't survive 4,500 iterations
-4. **Monitor per-city, alert on aggregate**: Don't drown in 4,500 dashboards
+3. **Automate everything**: Manual steps don't survive 4,300 iterations
+4. **Monitor per-city, alert on aggregate**: Don't drown in 4,300 dashboards
 5. **Retraining is the real product**: New data arrives daily; pipeline must re-run weekly
 6. **Global features help local models**: Climate zone, elevation as features > separate models per zone
 
@@ -138,6 +143,12 @@ data/
 - **Real-time API**: FastAPI + model registry for low-latency forecasting
 - **IoT integration**: Personal weather station data fusion
 - **Extreme event focus**: Separate models for heatwaves, storms, freezes
+
+## Related Project
+
+This blog post accompanies the **Weather Prediction at Scale** project case study.
+
+[**View Project Case Study →**](/projects/weather-prediction)
 
 ## Resources
 

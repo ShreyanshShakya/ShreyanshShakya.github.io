@@ -4,6 +4,8 @@ import { blogPosts } from "@/data/blog";
 
 const siteUrl = "https://shreyanshshakya.github.io";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const projectUrls = featuredProjects.map((project) => ({
     url: `${siteUrl}${project.link}`,

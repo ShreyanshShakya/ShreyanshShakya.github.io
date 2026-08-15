@@ -1,11 +1,9 @@
 ---
-title: "3D Brain Tumor Segmentation: From Baseline to Attention U-Net"
+title: "Brain MRI Tumor Segmentation: 3D U-Net to Attention + EfficientNet"
 date: "2025-06-20"
 tags: ["Medical AI", "Computer Vision", "PyTorch", "3D U-Net", "BraTS", "MONAI"]
-excerpt: "An iterative research journey through volumetric brain tumor segmentation—comparing baseline 3D U-Net, EfficientNet encoder, and Attention U-Net on the BraTS dataset with patch-based training and mixed precision."
+excerpt: "An iterative research journey through volumetric brain tumor segmentation—comparing baseline 3D U-Net, EfficientNet encoder, and Attention U-Net on the BraTS dataset with patch-based training and mixed precision. Final validation Dice: 0.8256 with Attention + EfficientNet."
 ---
-
-# 3D Brain Tumor Segmentation: From Baseline to Attention U-Net
 
 Brain tumor segmentation from MRI is one of medical AI's most impactful—and challenging—problems. This project wasn't about chasing SOTA; it was about understanding *why* architectural choices matter in volumetric medical imaging.
 
@@ -36,7 +34,7 @@ This incremental approach isolated each improvement's contribution.
 - Dice + CrossEntropy loss
 - Mixed precision (AMP), patch size 128³
 
-**Result**: Dice ~0.62 (whole tumor), ~0.55 (core), ~0.48 (enhancing)
+**Result**: Validation Dice **0.8057** (whole tumor)
 - Learned coarse localization
 - Struggled with complex boundaries and small structures
 - Stable convergence but plateaued early
@@ -48,30 +46,31 @@ This incremental approach isolated each improvement's contribution.
 - MBConv blocks with squeeze-and-excitation
 - Pre-trained on ImageNet (2D → 3D weight inflation)
 
-**Result**: Dice ~0.65 (whole), ~0.58 (core), ~0.51 (enhancing)
+**Result**: Validation Dice **0.8157** (whole tumor)
 - Better hierarchical feature extraction
 - More stable training dynamics
 - Justified further architectural exploration
 
-## Experiment 3: Attention U-Net
+## Experiment 3: Attention + EfficientNet
 
-**Change**: Add attention gates to decoder skip connections
+**Change**: Add attention gates to decoder skip connections on top of EfficientNet encoder
 - Attention coefficients modulate encoder features
 - Suppresses irrelevant background, highlights tumor regions
 - Minimal parameter overhead (~10%)
 
-**Result**: Dice ~0.67 (whole), ~0.61 (core), ~0.54 (enhancing)
-- **Best qualitative results**: Cleaner boundaries, fewer false positives
+**Result**: Validation Dice **0.8256** (whole tumor)
+- **+1.99 pp improvement over baseline**
+- Best qualitative results: Cleaner boundaries, fewer false positives
 - Improved localization consistency across validation cases
-- Became preferred architecture for final experiments
+- Became final architecture for the project
 
-## Experiment 4: Training Optimizations
+## Training Optimizations (Non-Architectural)
 
-Non-architectural improvements that mattered:
+These improvements applied to all experiments:
 - **Mixed precision (AMP)**: 2× memory reduction, 1.5× speedup
 - **Patch-based training**: 128³ patches with overlap, sliding window inference
 - **Gradient checkpointing**: Trade compute for memory
-- **DiceCELoss**: Combined Dice + CE for imbalance
+- **DiceCELoss**: Combined Dice + CE for class imbalance
 - **Cosine annealing + warmup**: Better convergence
 - **Early stopping + checkpointing**: Prevent overfitting, preserve best
 
@@ -83,7 +82,7 @@ Non-architectural improvements that mattered:
 | VRAM OOM on 3D conv | Mixed precision + gradient checkpointing + smaller patches |
 | NIfTI/MAT/HDF5 format hell | MONAI transforms + nibabel + custom preprocessing pipeline |
 | Experiment tracking chaos | MLflow + structured config (Hydra) + Git commits per experiment |
-| Class imbalance (tumor \< background) | Dice loss + weighted sampling + patch mining near tumor |
+| Class imbalance (tumor < background) | Dice loss + weighted sampling + patch mining near tumor |
 | Long training times (hrs/epoch) | AMP + multi-GPU DDP + early stopping |
 
 ## Key Lessons
@@ -94,13 +93,15 @@ Non-architectural improvements that mattered:
 4. **Dice-based objectives essential**: Cross-entropy alone fails on imbalanced segmentation
 5. **Attention helps where it should**: Gates suppress background, highlight tumor—interpretable and effective
 
-## Results Summary
+## Results Summary (Final Validated Configuration)
 
-| Model | Whole Tumor | Tumor Core | Enhancing | Params | VRAM (128³) |
-|-------|-------------|------------|-----------|--------|-------------|
-| Baseline 3D U-Net | 0.62 | 0.55 | 0.48 | 19M | 8.2 GB |
-| EfficientNet Encoder | 0.65 | 0.58 | 0.51 | 22M | 9.1 GB |
-| **Attention U-Net** | **0.67** | **0.61** | **0.54** | 21M | 8.5 GB |
+| Model | Validation Dice (Whole Tumor) | Params | VRAM (128³) |
+|-------|------------------------------|--------|-------------|
+| Baseline 3D U-Net | **0.8057** | 19M | 8.2 GB |
+| EfficientNet Encoder | **0.8157** | 22M | 9.1 GB |
+| **Attention + EfficientNet** | **0.8256** | 21M | 8.5 GB |
+
+> **Note**: The results above reflect the final validated experimental configuration. Earlier exploratory runs with different preprocessing/evaluation settings produced lower Dice scores (~0.62–0.67); those are superseded by the final configuration reported here.
 
 ## Future Directions
 
@@ -111,7 +112,13 @@ Non-architectural improvements that mattered:
 - **Federated learning**: Privacy-preserving multi-institution training
 - **Explainable AI**: Attention visualization for clinical trust
 - **Foundation models**: MedSAM, SAM-Med3D adaptation
-- **Distributed training**: Scale with the DMLF framework from this portfolio
+- **Distributed training**: Scale with the Distributed ML Training Framework from this portfolio
+
+## Related Project
+
+This blog post accompanies the **Brain MRI Tumor Segmentation** project case study.
+
+[**View Project Case Study →**](/projects/brain-mri-segmentation)
 
 ## Resources
 

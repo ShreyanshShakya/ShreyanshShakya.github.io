@@ -1,20 +1,94 @@
-# Why Distributed Training Still Bottlenecks at Scale
+---
+title: "Why Distributed Training Still Bottlenecks at Scale"
+date: "2026-07-15"
+tags: ["Distributed Systems", "PyTorch", "ML Infra"]
+excerpt: "A practical look at gradient synchronization, communication overlap, and the hidden costs of scaling PyTorch DDP. Based on building a distributed ML training framework for heterogeneous consumer hardware."
+---
 
 Distributed data-parallel training is attractive because it is easy to understand: split the batch, run the backward pass on each worker, synchronize gradients, and update the model.
 
 The problem is that synchronization is not free. Once a model grows large enough, the network becomes the real bottleneck, not the GPU.
 
-## The core issue
+## The Core Problem
 
 Every training step has two clocks:
 
-- Compute clock: how long the GPUs spend on forward and backward passes.
-- Communication clock: how long the cluster spends moving gradients around.
+- **Compute clock**: how long the GPUs spend on forward and backward passes.
+- **Communication clock**: how long the cluster spends moving gradients around.
 
 If communication cannot be hidden behind compute, scaling efficiency drops quickly.
 
-## What worked
+## What DDP Actually Synchronizes
 
-In practice, the biggest gains came from overlapping communication with backward computation, reordering gradient buckets based on real runtime traces, and keeping an eye on the slowest worker in the cluster.
+PyTorch Distributed Data Parallel (DDP) organizes model parameters into **gradient buckets** (typically ~25 MB each). After the backward pass:
 
-> The lesson is simple: optimize the synchronization pipeline, not just the model code.
+1. Gradients accumulate in each bucket
+2. When a bucket is ready, DDP launches an `all-reduce` (typically NCCL on GPU, Gloo on CPU)
+3. Workers wait at the bucket boundary until all-reduce completes
+4. Optimizer step runs once all buckets are synchronized
+
+The critical path: **slowest worker at each bucket boundary**.
+
+## Where the Bottleneck Appears
+
+```
+Compute (forward + backward)
+        ↓
+Gradient bucket ready
+        ↓
+all-reduce (network bound)
+        ↓
+Next bucket / optimizer step
+```
+
+With large models (1B+ params), gradient size reaches GBs. On consumer-grade networking (1-10 Gbps), all-reduce dominates step time.
+
+## What Worked in Practice
+
+Building the **Distributed ML Training Framework** (orchestrating heterogeneous consumer laptops over LAN), the biggest gains came from:
+
+### 1. Communication-Compute Overlap
+DDP supports overlapping all-reduce with backward computation via bucket callback hooks. Proper bucket sizing and ordering lets the next layer's backward pass run while the previous bucket's gradients are in flight.
+
+### 2. Gradient Bucket Reordering
+Default bucket ordering follows parameter registration. Reordering based on **real runtime traces** (which layers finish backward first) lets communication start earlier.
+
+### 3. Heterogeneous Node Management
+Mixed CPU/GPU nodes with different memory and compute capabilities. The framework's scheduler assigns work proportionally and uses Gloo backend for CPU nodes, NCCL for GPU nodes.
+
+### 4. Fault-Aware Monitoring
+Worker heartbeats + telemetry streaming let the cluster manager detect stragglers early and redistribute work before they stall the entire synchronization.
+
+## Engineering Trade-offs
+
+| Factor | Impact |
+|--------|--------|
+| **Bandwidth** | Consumer LAN (1 Gbps) vs. datacenter (100+ Gbps) — 100× difference |
+| **Latency** | All-reduce latency scales with node count; tree/ring algorithms help |
+| **Node heterogeneity** | Slowest node determines bucket completion time |
+| **Synchronization frequency** | Larger buckets = fewer synchronizations but less overlap opportunity |
+
+## What Worked (Verified Implementation)
+
+- **Multi-node DDP** with automatic worker registration via gRPC
+- **SQLite-backed cluster registry** for persistent node state
+- **Job scheduler** that respects node capabilities (CPU vs GPU, memory)
+- **CPU fallback (Gloo)** when NCCL unavailable
+- **Telemetry streaming** for real-time monitoring
+
+## Key Insight
+
+Optimize the **synchronization pipeline**, not just the model code. The framework that manages workers, schedules jobs, and handles heterogeneity matters as much as the model architecture.
+
+## Related Project
+
+This blog post accompanies the **Distributed ML Training Framework** project case study.
+
+[**View Project Case Study →**](/projects/distributed-ml-framework)
+
+## Resources
+
+- [PyTorch DDP Documentation](https://pytorch.org/docs/stable/generated/torch.nn.parallel.DistributedDataParallel.html)
+- [NCCL Documentation](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/index.html)
+- [Gloo Documentation](https://github.com/facebookincubator/gloo)
+- [High-Performance Distributed Training](https://pytorch.org/tutorials/intermediate/ddp_tutorial.html)

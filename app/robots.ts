@@ -2,6 +2,8 @@ import { MetadataRoute } from "next";
 
 const siteUrl = "https://shreyanshshakya.github.io";
 
+export const dynamic = "force-static";
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
@@ -22,7 +24,6 @@ export default function robots(): MetadataRoute.Robots {
         "/_next/",
         "/static/",
         "/*.json$",
-        "/*.xml$",
       ],
     },
     sitemap: `${siteUrl}/sitemap.xml`,
