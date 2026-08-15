@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Download, Github, Linkedin, Mail, MapPin, Phone } from "lucide-react";
+import { Download, Mail, Phone } from "lucide-react";
 
 const sections = [
   {
@@ -105,8 +105,8 @@ export function ResumeClient() {
             <div className="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs sm:text-sm">
               <span className="inline-flex items-center gap-1"><Phone className="w-3.5 h-3.5" /> +91-9116924202</span>
               <span className="inline-flex items-center gap-1"><Mail className="w-3.5 h-3.5" /> shreyanshshakya695@gmail.com</span>
-              <span className="inline-flex items-center gap-1"><Linkedin className="w-3.5 h-3.5" /> LinkedIn</span>
-              <span className="inline-flex items-center gap-1"><Github className="w-3.5 h-3.5" /> GitHub</span>
+              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="underline">LinkedIn</a>
+              <a href="https://github.com/ShreyanshShakya" target="_blank" rel="noreferrer" className="underline">GitHub</a>
             </div>
           </header>
 
