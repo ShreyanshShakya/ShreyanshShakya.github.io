@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
+import remarkGfm from "remark-gfm";
 
 const nextConfig: NextConfig = {
   output: "export",
@@ -11,6 +12,10 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["172.25.211.229"],
 };
 
-const withMDX = createMDX();
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: [remarkGfm],
+  },
+});
 
 export default withMDX(nextConfig);
