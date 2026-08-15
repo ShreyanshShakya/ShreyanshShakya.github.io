@@ -1,26 +1,34 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { Database, MapPinned, Layers3, BookOpen } from "lucide-react";
 import { social } from "@/data/social";
 
 const stats = [
-  { label: "Major Engineering Projects", value: "6" },
-  { label: "Research-Oriented Projects", value: "4" },
-  { label: "Distributed Systems Projects", value: "2" },
-  { label: "Deep Learning Projects", value: "3" },
-  { label: "Multi-Agent Systems", value: "2" },
-  { label: "Medical AI Projects", value: "1" },
-  { label: "Speech AI Projects", value: "1" },
-  { label: "Large-Scale Data Projects", value: "1" },
-  { label: "Historical Weather Dataset", value: "90 GB" },
-  { label: "Cities Modeled", value: "4,300+" },
-  { label: "Weather Records Span", value: "10 Years" },
-  { label: "Published Research Papers", value: "1" },
-  { label: "Research Domains", value: "5+" },
-  { label: "Engineering Case Studies", value: "6" },
-  { label: "Programming Languages", value: "5+" },
-  { label: "ML Frameworks", value: "5+" },
-  { label: "Distributed Technologies", value: "5+" },
+  {
+    value: "90 GB",
+    label: "Largest Dataset Processed",
+    detail: "Handled end-to-end in training and evaluation pipelines",
+    icon: Database,
+  },
+  {
+    value: "4,300+",
+    label: "Cities Modeled",
+    detail: "City-specific weather forecasting across a decade of data",
+    icon: MapPinned,
+  },
+  {
+    value: "7",
+    label: "Engineering Case Studies",
+    detail: "Distributed systems, agentic AI, ML, and research projects",
+    icon: Layers3,
+  },
+  {
+    value: "1",
+    label: "IEEE Publication",
+    detail: "Peer-reviewed research in speech emotion recognition",
+    icon: BookOpen,
+  },
 ];
 
 export function GithubStats() {
@@ -36,28 +44,45 @@ export function GithubStats() {
           transition={{ duration: shouldReduceMotion ? 0 : 0.5 }}
           className="text-sm text-secondary uppercase tracking-widest font-mono mb-12 sm:mb-16 text-center"
         >
-          Verifiable Highlights
+          By The Numbers
         </motion.h2>
 
-        {/* Stat cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 mb-10 sm:mb-12">
-          {stats.map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: shouldReduceMotion ? 0 : 0.5, delay: shouldReduceMotion ? 0 : i * 0.05 }}
-              className="rounded-xl border border-border bg-card p-4 sm:p-5 text-center hover:border-accent/30 transition-colors"
-            >
-              <p className="text-lg sm:text-xl sm:text-2xl font-heading font-bold text-foreground">
-                {stat.value}
-              </p>
-              <p className="text-xs text-secondary font-mono mt-1 leading-tight">
-                {stat.label}
-              </p>
-            </motion.div>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-10 sm:mb-12">
+          {stats.map((stat, i) => {
+            const Icon = stat.icon;
+
+            return (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: shouldReduceMotion ? 0 : 0.5,
+                  delay: shouldReduceMotion ? 0 : i * 0.08,
+                }}
+                className="group rounded-2xl border border-border bg-card/80 p-6 sm:p-8 hover:border-accent/30 transition-all duration-300"
+              >
+                <div className="flex items-start gap-5 sm:gap-7">
+                  <div className="shrink-0 flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-2xl border border-border bg-background/60 text-accent transition-colors duration-300 group-hover:border-accent/40">
+                    <Icon className="h-8 w-8 sm:h-9 sm:w-9" strokeWidth={1.7} aria-hidden="true" />
+                  </div>
+
+                  <div className="min-w-0 pt-1">
+                    <p className="text-3xl sm:text-4xl font-heading font-bold text-foreground tracking-tight">
+                      {stat.value}
+                    </p>
+                    <p className="text-sm sm:text-base text-accent mt-1 font-medium">
+                      {stat.label}
+                    </p>
+                    <p className="text-sm text-secondary mt-2 leading-relaxed max-w-xl">
+                      {stat.detail}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Contribution graph */}
