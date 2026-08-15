@@ -1,10 +1,3 @@
----
-title: "Technical Note: Designing Reliable Multi-Agent Systems"
-date: "2026-06-20"
-tags: ["LLMs", "Agents", "Architecture"]
-excerpt: "Notes on orchestration, context management, and fault tolerance for specialized LLM agent teams. Based on building AgentForge and AI Research Orchestrator."
----
-
 Multi-agent systems look simple on the surface: one orchestrator, a few specialist agents, and a shared task.
 
 The hard part is the glue. Once multiple agents start reasoning in parallel, you inherit the same problems that show up in distributed systems: partial failure, inconsistent state, and coordination overhead.
