@@ -171,6 +171,18 @@ pre {
   border-radius: 0.75rem;
   font-size: 0.875rem;
   line-height: 1.7;
+  white-space: pre !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+}
+
+/* Tailwind Typography can override whitespace on nested code elements.
+   Architecture diagrams use fixed-width box-drawing characters, so they
+   must never wrap inside the diagram container. */
+pre code {
+  white-space: pre !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
 }
 
 code {
