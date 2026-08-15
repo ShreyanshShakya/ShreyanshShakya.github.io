@@ -83,10 +83,10 @@ export function Hero() {
 
           <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-10 max-w-4xl">
             {[
-              { value: "0.8256", label: "Best validation Dice" },
-              { value: "90 GB", label: "Largest dataset processed" },
-              { value: "2+", label: "Distributed nodes validated" },
-              { value: "1", label: "IEEE publication" },
+              { value: "7", label: "Engineering case studies" },
+              { value: "4,300+", label: "Cities modeled" },
+              { value: "10 Years", label: "Weather data span" },
+              { value: "5+", label: "ML frameworks used" },
             ].map((stat) => (
               <div
                 key={stat.label}
