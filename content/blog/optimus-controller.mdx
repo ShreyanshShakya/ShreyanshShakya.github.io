@@ -1,10 +1,3 @@
----
-title: "Optimus: Autonomous EnergyPlus Building Controller"
-date: "2026-07-25"
-tags: ["EnergyPlus", "Physical AI", "Building Control", "Ollama", "Qwen", "Streamlit", "Docker"]
-excerpt: "A safety-constrained physical-AI controller for autonomous building operations. Uses EnergyPlus simulation with PyEnergyPlus API, local LLM (Ollama/Qwen) or deterministic fallback for bounded planning, and hard safety validation before schedule override injection."
----
-
 Building HVAC control typically relies on fixed schedules or reactive thermostats. Optimus is a **safety-constrained physical-AI controller** that observes live EnergyPlus simulation state, plans bounded supervisory actions via local LLM or deterministic fallback, validates safety constraints, and injects approved schedule overrides — all with full auditability.
 
 ## The Problem
