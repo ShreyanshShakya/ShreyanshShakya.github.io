@@ -27,16 +27,16 @@ Live PyEnergyPlus Callback Loop
       ↓
 ┌─────────────────────────────────────┐
 │  Bounded Planner                    │
-│  • Local Ollama/Qwen               │
-│  • Deterministic fallback          │
-│  • Compact structured context      │
+│  • Local Ollama/Qwen                │
+│  • Deterministic fallback           │
+│  • Compact structured context       │
 └─────────────────────────────────────┘
       ↓
 ┌─────────────────────────────────────┐
 │  Hard Safety Validator              │
-│  • PMV + zone temp (comfort)       │
-│  • ITE inlet temp (data center)    │
-│  • One-hour bound + auto-restore   │
+│  • PMV + zone temp (comfort)        │
+│  • ITE inlet temp (data center)     │
+│  • One-hour bound + auto-restore    │
 └─────────────────────────────────────┘
       ↓
 Schedule Override Injection → EnergyPlus
