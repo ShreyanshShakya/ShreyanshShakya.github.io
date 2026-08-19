@@ -5,19 +5,19 @@ export const skills = [
   },
   {
     category: "LLM Applications",
-    items: ["TypeScript", "Node.js", "Ollama", "Semantic Scholar", "OpenAlex", "Agent Orchestration", "RAG", "Prompt Engineering"],
+    items: ["Ollama", "Semantic Scholar", "OpenAlex", "Agent Orchestration", "Prompt Engineering"],
   },
   {
     category: "Medical AI",
-    items: ["3D U-Net", "Attention U-Net", "BraTS", "Dice Loss", "Mixed Precision", "MONAI", "nibabel", "SimpleITK", "EfficientNet"],
+    items: ["3D U-Net", "Attention U-Net", "BraTS", "Dice Loss", "Mixed Precision", "MONAI", "nibabel", "EfficientNet"],
   },
   {
     category: "Speech AI",
-    items: ["Librosa", "MFCC", "CNN", "RNN", "TensorFlow", "PyTorch", "Real-time Inference", "RAVDESS", "CREMA-D"],
+    items: ["Librosa", "MFCC", "CNN", "TensorFlow", "PyTorch", "Real-time Inference", "RAVDESS", "CREMA-D"],
   },
   {
     category: "Data Engineering",
-    items: ["XGBoost", "Pandas", "NumPy", "Scikit-learn", "Time Series", "Feature Engineering", "90GB Pipeline", "4500+ Models"],
+    items: ["XGBoost", "Pandas", "NumPy", "Scikit-learn", "Time Series", "Feature Engineering", "90GB Pipeline"],
   },
   {
     category: "Cloud & Infra",
@@ -25,7 +25,7 @@ export const skills = [
   },
   {
     category: "Languages",
-    items: ["Python", "TypeScript", "SQL", "C++", "Java", "JavaScript"],
+    items: ["SQL", "C++", "Java", "JavaScript"],
   },
   {
     category: "Research & Software Engineering",
