@@ -19,10 +19,11 @@ const sections = [
     title: "Technical Skills",
     content: (
       <div className="space-y-1.5">
-        <p><strong>Programming:</strong> Python, Java (Basic), SQL</p>
-        <p><strong>Machine Learning &amp; Deep Learning:</strong> TensorFlow, PyTorch, 3D U-Net, EfficientNet, CNN, XGBoost, CatBoost, LightGBM</p>
-        <p><strong>Audio &amp; Signal Processing:</strong> Librosa, MFCC</p>
-        <p><strong>Databases &amp; Systems:</strong> SQLite, WSL</p>
+        <p><strong>Programming Languages:</strong> Python, Java (Basic), SQL</p>
+        <p><strong>Machine Learning:</strong> XGBoost, CatBoost, LightGBM, Ensemble Learning, Feature Engineering</p>
+        <p><strong>Deep Learning:</strong> TensorFlow, PyTorch, CNN, 3D U-Net, EfficientNet</p>
+        <p><strong>Data &amp; Model Evaluation:</strong> Pandas, NumPy, Data Preprocessing, Exploratory Data Analysis, MAE, Dice Score, IoU, Ablation Studies</p>
+        <p><strong>ML Deployment &amp; Tools:</strong> FastAPI, Docker, Hugging Face, Gradio, SQLite, WSL</p>
       </div>
     ),
   },
