@@ -1,26 +1,22 @@
 export const skills = [
   {
-    category: "Machine Learning & Deep Learning",
-    items: [
-      "Python",
-      "TensorFlow",
-      "PyTorch",
-      "3D U-Net",
-      "EfficientNet",
-      "Librosa",
-      "MFCC",
-      "CNN",
-      "XGBoost",
-      "CatBoost",
-      "LightGBM",
-    ],
+    category: "Programming Languages",
+    items: ["Python", "Java (Basic)", "SQL"],
+  },
+  {
+    category: "Machine Learning",
+    items: ["XGBoost", "CatBoost", "LightGBM"],
+  },
+  {
+    category: "Deep Learning & Computer Vision",
+    items: ["TensorFlow", "PyTorch", "CNN", "3D U-Net", "EfficientNet"],
+  },
+  {
+    category: "Audio & Signal Processing",
+    items: ["Librosa", "MFCC"],
   },
   {
     category: "Databases & Systems",
-    items: ["SQLite", "WSL", "SQL"],
-  },
-  {
-    category: "Programming Languages",
-    items: ["Java (Basic)"],
+    items: ["SQLite", "WSL"],
   },
 ];
