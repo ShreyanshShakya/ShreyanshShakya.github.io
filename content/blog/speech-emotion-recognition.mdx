@@ -2,142 +2,83 @@
 > **DOI:** [10.1109/DECoN67170.2025.11448083](https://doi.org/10.1109/DECoN67170.2025.11448083)  
 > **Title:** *Speech Emotion Recognition: A Human-Centric Framework with Enhanced Data Augmentation and Lightweight CNN*
 
-Speech Emotion Recognition (SER) is a critical component of affective computing—enabling machines to understand not just *what* is said, but *how* it's said. This project presented the full engineering challenge: from raw audio to real-time emotion classification.
+Speech Emotion Recognition (SER) aims to classify emotional states from speech. This project focused on building a **lightweight CNN-based emotion classification system**, with audio preprocessing and feature extraction forming an important part of the pipeline.
 
-## Two Architectures: Published vs. Extended
-
-This project comprises two related but distinct implementations:
-
-### 1. Published Research (IEEE DECoN 2025)
-
-**Lightweight CNN + Enhanced Augmentation** — optimized for the paper's scope:
-- Lightweight CNN architecture (no recurrent layers)
-- Enhanced data augmentation pipeline (pitch shifting, time stretching, noise injection, SpecAugment)
-- Speaker-independent evaluation on RAVDESS and CREMA-D
-- Sub-100ms inference latency
-
-### 2. Extended Project Implementation
-
-**Hybrid CNN + BiLSTM + Attention** — broader engineering exploration:
-- CNN for local spectral pattern extraction
-- Bidirectional LSTM for temporal dependency modeling
-- Attention pooling for weighted temporal feature aggregation
-- Real-time streaming inference pipeline
-
-Both share the same preprocessing foundation. The extended implementation builds on the published work to explore temporal modeling and real-time deployment.
+The work was also published at **IEEE DECoN 2025**.
 
 ## The Problem
 
-Human emotional expression in speech varies enormously:
-- **Speaker variability**: Pitch, accent, speaking rate differ wildly
-- **Recording conditions**: Background noise, microphone quality, room acoustics
-- **Class imbalance**: Some emotions (neutral) dominate datasets
-- **Real-time constraints**: Sub-100ms inference for conversational AI
+Speech carries information beyond its words, but emotion recognition is affected by differences between speakers and recordings. A useful model therefore needs a consistent audio-processing pipeline and an architecture that can learn meaningful speech features without becoming unnecessarily large.
 
-## Shared Preprocessing Pipeline
+The project also had a practical constraint: the final trained model is documented in the project repository as being **less than 5 MB**, with the goal of keeping the system lightweight.
 
-1. **Audio loading** with librosa (consistent sample rate: 22050 Hz)
-2. **Silence removal** using energy-based VAD
-3. **Signal normalization** to [-1, 1] range
-4. **Fixed-length segmentation** (3-second windows with overlap)
+## Pipeline
 
-## Published Architecture: Lightweight CNN
+The project follows a straightforward audio-classification workflow:
 
-The IEEE DECoN 2025 paper focuses on a **lightweight CNN** with enhanced augmentation:
+```text
+Speech Audio
+     ↓
+Audio Preprocessing
+     ↓
+MFCC Feature Extraction
+     ↓
+Lightweight CNN
+     ↓
+Emotion Classification
+```
 
-- **CNN layers**: Local spectral pattern extraction from MFCC sequences
-- **No recurrent layers** — purely convolutional for speed
-- **Enhanced augmentation**: Pitch shifting, time stretching, noise injection, SpecAugment
-- **Output**: 7-8 emotion classes (neutral, happy, sad, angry, fear, disgust, surprise)
+## Audio Features
 
-## Extended Architecture: Hybrid CNN + BiLSTM + Attention
+The system uses **Librosa** for audio processing and **MFCCs (Mel-Frequency Cepstral Coefficients)** as the primary representation for the CNN model.
 
-The broader project implementation explores temporal modeling:
+MFCCs provide a compact representation of the spectral characteristics of speech and are widely used in speech-processing systems.
 
-- **CNN layers**: Local spectral pattern extraction from MFCC sequences
-- **BiLSTM layers**: Temporal dependency modeling across utterance
-- **Attention pooling**: Weighted aggregation of temporal features
-- **Output**: 7-8 emotion classes (neutral, happy, sad, angry, fear, disgust, surprise)
+## CNN Architecture
 
-## Key Engineering Challenges
+The core model is a **CNN**. The project README describes the model as a lightweight architecture designed for environments with limited computational resources.
 
-### 1. Speaker Generalization
+Rather than adding recurrent or attention-based components to the portfolio description, this article focuses on the architecture that is explicitly documented in the project repository: a lightweight CNN for emotion classification.
 
-Models easily overfit to training speakers. Solutions:
-- **Data augmentation**: Pitch shifting, time stretching, noise injection
-- **Speaker-independent splits**: Train/test by speaker, not sample
-- **Domain adversarial training**: Gradient reversal for speaker invariance
+## Training
 
-### 2. Class Imbalance
+The project was trained using **Kaggle's remote GPU environment**. The repository notes that retraining the model efficiently requires a system with approximately **14 GB of GPU memory**.
 
-Neutral class often 40%+ of data. Used:
-- **Weighted cross-entropy** with inverse frequency weights
-- **Focal loss** to focus on hard examples
-- **Oversampling** minority classes in each batch
+The repository also includes a pretrained emotion-detection model, allowing the trained artifact to be reused without starting training from scratch.
 
-### 3. Real-Time Inference
+## Research Publication
 
-- **ONNX export** for optimized inference
-- **Quantization** (INT8) for edge deployment
-- **Streaming chunk processing** with overlap-add for continuous audio
+The work was published as:
 
-## Results
+**Speech Emotion Recognition: A Human-Centric Framework with Enhanced Data Augmentation and Lightweight CNN**  
+*IEEE DECoN 2025*
 
-### Published Work (IEEE DECoN 2025)
+**DOI:** 10.1109/DECoN67170.2025.11448083
 
-The paper reports competitive accuracy with the lightweight CNN on speaker-independent splits. See the [publication](https://doi.org/10.1109/DECoN67170.2025.11448083) for detailed metrics.
+The publication is the formal research record for this work; detailed experimental metrics should be taken from the paper rather than from unsupported development estimates.
 
-### Extended Implementation (Development Measurements)
+## What I Learned
 
-> **Disclaimer**: The following are **development measurements** from the extended CNN-BiLSTM implementation during project testing, not controlled benchmark results with statistical validation. They reflect the broader project's experimental configuration and should not be cited as formal benchmarks.
-
-| Dataset | Classes | Accuracy | F1 (Macro) | Latency |
-|---------|---------|----------|------------|---------|
-| RAVDESS | 8 | ~78% | ~0.75 | 45ms |
-| CREMA-D | 6 | ~73% | ~0.70 | 52ms |
-
-*Conditions: Speaker-independent splits, single-sample inference, warm model, CPU/GPU varies.*
-
-## Lessons Learned
-
-1. **Preprocessing > Architecture**: Clean, consistent audio pipeline mattered more than model tweaks
-2. **MFCCs still work**: Despite raw waveform trends, MFCCs provide strong perceptual features with low compute
-3. **Train/test split by speaker**: Random splits inflate metrics; speaker-independent is the real test
-4. **Consistency is deployment**: Same preprocessing at train and inference time is non-negotiable
-5. **Hybrid CNN-RNN > Pure approaches**: Local patterns + temporal context both matter for emotion
-6. **Lightweight can be enough**: The published CNN achieved competitive results without recurrent layers—simpler is often better
+1. **Feature representation matters.** MFCCs provide a compact representation that works well with lightweight CNN architectures.
+2. **Model size is an engineering constraint.** Keeping the trained model small makes deployment easier on resource-constrained systems.
+3. **Preprocessing is part of the model.** In audio classification, inconsistent preprocessing can affect the quality of the features presented to the classifier.
+4. **GPU resources matter during training.** Even a lightweight inference model can require substantially more memory during training.
+5. **Research and engineering should agree.** The implementation and the published architecture should be described consistently rather than mixing experimental variants into the final system description.
 
 ## Future Work
 
-- Transformer-based speech models (Wav2Vec2, HuBERT fine-tuning)
-- Self-supervised speech representation learning
-- Multimodal emotion recognition (audio + video + text)
-- Cross-lingual emotion recognition
-- Noise-robust speech processing with denoising front-ends
-- Edge deployment (TensorRT, CoreML, TFLite)
+Potential directions include stronger noise robustness, improved cross-speaker generalization, alternative audio representations, and evaluation of newer speech representation models.
 
 ## Related Project
 
-This blog post accompanies the **Speech Emotion Recognition** project case study.
+This article accompanies the **Emotion Recognition** project case study.
 
-[**View Project Case Study →**](/projects/speech-emotion-recognition)
+[**View Project Case Study →**](/projects/emotion-recognition)
 
 ## Resources
 
-- [RAVDESS Dataset](https://zenodo.org/record/1188976)
-- [CREMA-D Dataset](https://github.com/CheyneyComputerScience/CREMA-D)
+- [IEEE DECoN 2025 Publication](https://doi.org/10.1109/DECoN67170.2025.11448083)
 - [Librosa Documentation](https://librosa.org/doc/latest/index.html)
-- [TensorFlow/Keras](https://www.tensorflow.org/)
-
-## Publication
-
-**Speech Emotion Recognition: A Human-Centric Framework with Enhanced Data Augmentation and Lightweight CNN**  
-*IEEE DECoN 2025 (Distributed Computing and Networking Conference)*  
-**DOI:** 10.1109/DECoN67170.2025.11448083  
-**Year:** 2025
-
-**Key Contributions:**
-- Enhanced data augmentation pipeline (pitch shifting, time stretching, noise injection, SpecAugment) tailored for SER
-- Lightweight CNN architecture achieving competitive accuracy with sub-100ms inference latency
-- Speaker-independent evaluation on RAVDESS and CREMA-D datasets
-- Analysis of augmentation impact on cross-speaker generalization
+- [TensorFlow](https://www.tensorflow.org/)
+- [RAVDESS Dataset](https://zenodo.org/records/1188976)
+- [CREMA-D Dataset](https://github.com/CheyneyComputerScience/CREMA-D)
