@@ -9,8 +9,8 @@ import { GithubStats } from "@/components/sections/GithubStats";
 import { Contact } from "@/components/sections/Contact";
 
 export const metadata: Metadata = {
-  title: "Shreyansh Shakya — AI Engineer & ML Systems Builder",
-  description: "AI Engineer building distributed ML infrastructure, agentic AI systems, and research-driven machine learning applications. Experienced with PyTorch Distributed, LLM orchestration, and scalable software engineering.",
+  title: "Shreyansh Shakya — AI Engineer & ML Practitioner",
+  description: "AI engineer building practical machine learning applications across medical imaging, speech emotion recognition, and weather prediction using Python, TensorFlow, PyTorch, and modern machine learning methods.",
 };
 
 export default function Home() {
