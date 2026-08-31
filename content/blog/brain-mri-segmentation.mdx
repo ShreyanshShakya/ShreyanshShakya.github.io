@@ -1,122 +1,135 @@
-Brain tumor segmentation from MRI is one of medical AI's most impactful—and challenging—problems. This project wasn't about chasing SOTA; it was about understanding *why* architectural choices matter in volumetric medical imaging.
+# Brain MRI Tumor Segmentation with 3D U-Net Architectures
 
-## The Challenge
+Brain tumor segmentation is a challenging medical-imaging problem because the model has to reason over volumetric MRI data while distinguishing relatively small tumor regions from a much larger background.
 
-**BraTS (Brain Tumor Segmentation) Dataset:**
-- Multi-modal MRI: T1, T1ce, T2, FLAIR (4 channels)
-- Expert annotations: Enhancing tumor, tumor core, whole tumor
-- Volumetric: ~240×240×155 voxels per scan
-- Class imbalance: Tumor ~2-5% of brain volume
-- GPU memory: 3D convolutions explode VRAM usage
+This project was designed as a comparative study rather than a search for a single complicated architecture. The main question was simple: **how much does each architectural change improve volumetric segmentation?**
 
-## Iterative Experimental Methodology
+## The Dataset
 
-Each experiment changed **one architectural component** while keeping everything else identical:
+The project uses the **BraTS 2020** dataset, containing multi-modal MRI scans and expert tumor segmentation masks. Four MRI modalities are used as input:
 
+- T1
+- T1ce
+- T2
+- FLAIR
+
+The original BraTS labels are remapped into three tumor classes plus background for training.
+
+## Experimental Approach
+
+I evaluated three architectures while progressively introducing architectural changes:
+
+```text
+BraTS 2020
+    ↓
+Preprocessing + Tumor-aware Sampling
+    ↓
+Baseline 3D U-Net
+    ↓
+EfficientNet-based 3D U-Net
+    ↓
+EfficientNet + Attention 3D U-Net
+    ↓
+Validation
 ```
-Dataset Prep → Baseline → Encoder Swap → Attention → Hyperparams → Evaluation
-```
 
-This incremental approach isolated each improvement's contribution.
+The goal was to compare the models using the same general training pipeline and observe whether each architectural change produced a measurable improvement.
 
 ## Experiment 1: Baseline 3D U-Net
 
-**Architecture**: Standard encoder-decoder with skip connections
-- 4 encoder blocks (32→64→128→256 channels)
-- 3D convolutions, InstanceNorm, ReLU
-- Dice + CrossEntropy loss
-- Mixed precision (AMP), patch size 128³
+The first model established a conventional volumetric segmentation baseline using a 3D U-Net encoder-decoder with skip connections, 3D convolution blocks, normalization, ReLU activations, and transposed-convolution upsampling.
 
-**Result**: Validation Dice **0.8057** (whole tumor)
-- Learned coarse localization
-- Struggled with complex boundaries and small structures
-- Stable convergence but plateaued early
+The project README reports a **best validation Dice score of 0.8057** and an IoU of **0.7349** for the baseline model.
 
-## Experiment 2: EfficientNet Encoder
+## Experiment 2: EfficientNet-based 3D U-Net
 
-**Change**: Replace baseline encoder with EfficientNet-B0 (3D adapted)
-- Compound scaling: depth, width, resolution
-- MBConv blocks with squeeze-and-excitation
-- Pre-trained on ImageNet (2D → 3D weight inflation)
+The next experiment replaced the baseline encoder with EfficientNet-inspired MBConv blocks. The design uses depthwise-separable 3D convolutions, squeeze-and-excitation blocks, residual connections, and efficient feature extraction.
 
-**Result**: Validation Dice **0.8157** (whole tumor)
-- Better hierarchical feature extraction
-- More stable training dynamics
-- Justified further architectural exploration
+The validation Dice increased to **0.8157**, while IoU increased to **0.7427**.
 
-## Experiment 3: Attention + EfficientNet
+This experiment showed that changing the encoder could improve the representation learned from the volumetric MRI data without abandoning the U-Net structure.
 
-**Change**: Add attention gates to decoder skip connections on top of EfficientNet encoder
-- Attention coefficients modulate encoder features
-- Suppresses irrelevant background, highlights tumor regions
-- Minimal parameter overhead (~10%)
+## Experiment 3: EfficientNet + Attention
 
-**Result**: Validation Dice **0.8256** (whole tumor)
-- **+1.99 pp improvement over baseline**
-- Best qualitative results: Cleaner boundaries, fewer false positives
-- Improved localization consistency across validation cases
-- Became final architecture for the project
+The final architecture added attention mechanisms to the decoder pathway on top of the EfficientNet-based encoder.
 
-## Training Optimizations (Non-Architectural)
+The purpose was to make the skip connections more selective: instead of passing all encoder features equally into the decoder, attention gates help emphasize relevant tumor features and suppress irrelevant background information.
 
-These improvements applied to all experiments:
-- **Mixed precision (AMP)**: 2× memory reduction, 1.5× speedup
-- **Patch-based training**: 128³ patches with overlap, sliding window inference
-- **Gradient checkpointing**: Trade compute for memory
-- **DiceCELoss**: Combined Dice + CE for class imbalance
-- **Cosine annealing + warmup**: Better convergence
-- **Early stopping + checkpointing**: Prevent overfitting, preserve best
+This produced the strongest result in the study:
 
-## Engineering Challenges & Solutions
+- **Dice: 0.8256**
+- **IoU: 0.7575**
 
-| Challenge | Solution |
-|-----------|----------|
-| 3D volumes too large for GPU | Patch-based training + sliding window inference |
-| VRAM OOM on 3D conv | Mixed precision + gradient checkpointing + smaller patches |
-| NIfTI/MAT/HDF5 format hell | MONAI transforms + nibabel + custom preprocessing pipeline |
-| Experiment tracking chaos | MLflow + structured config (Hydra) + Git commits per experiment |
-| Class imbalance (tumor < background) | Dice loss + weighted sampling + patch mining near tumor |
-| Long training times (hrs/epoch) | AMP + multi-GPU DDP + early stopping |
+Compared with the baseline, the final architecture improved Dice by **2.47 percentage points**.
 
-## Key Lessons
+## Training Pipeline
 
-1. **Experimental methodology > Architectural complexity**: One change at a time beats kitchen-sink approaches
-2. **Preprocessing pipeline = half the battle**: NIfTI loading, normalization, orientation correction, patch extraction
-3. **3D models are memory-bound**: Training strategy (patches, AMP, checkpointing) matters more than layers
-4. **Dice-based objectives essential**: Cross-entropy alone fails on imbalanced segmentation
-5. **Attention helps where it should**: Gates suppress background, highlight tumor—interpretable and effective
+The repository documents the following training components:
 
-## Results Summary (Final Validated Configuration)
+- NIfTI MRI volumes loaded with NiBabel
+- Four MRI modalities combined into a 4-channel input
+- Per-modality Z-score normalization
+- Non-zero voxel normalization
+- Label remapping
+- Tumor-aware patch sampling
+- Data quality filtering
+- Mixed-precision training with AMP
+- Adam optimizer
+- Dice + Cross Entropy loss
+- Early stopping
+- Model checkpointing
+- Validation monitoring
 
-| Model | Validation Dice (Whole Tumor) | Params | VRAM (128³) |
-|-------|------------------------------|--------|-------------|
-| Baseline 3D U-Net | **0.8057** | 19M | 8.2 GB |
-| EfficientNet Encoder | **0.8157** | 22M | 9.1 GB |
-| **Attention + EfficientNet** | **0.8256** | 21M | 8.5 GB |
+These choices address practical issues in 3D medical imaging, especially the large memory footprint of volumetric convolutions and the imbalance between tumor and background voxels.
 
-> **Note**: The results above reflect the final validated experimental configuration. Earlier exploratory runs with different preprocessing/evaluation settings produced lower Dice scores (~0.62–0.67); those are superseded by the final configuration reported here.
+## Results
 
-## Future Directions
+| Model | Validation Dice | Validation IoU |
+|---|---:|---:|
+| Baseline 3D U-Net | 0.8057 | 0.7349 |
+| EfficientNet U-Net | 0.8157 | 0.7427 |
+| EfficientNet + Attention U-Net | **0.8256** | **0.7575** |
 
-- **Transformer-based**: Swin UNETR, nnUNet v2 for volumetric attention
-- **Self-supervised**: Masked autoencoders on unlabeled MRI
-- **Multi-modal fusion**: Explicit cross-modal attention (T1ce + FLAIR)
-- **Semi-supervised**: Consistency regularization with limited labels
-- **Federated learning**: Privacy-preserving multi-institution training
-- **Explainable AI**: Attention visualization for clinical trust
-- **Foundation models**: MedSAM, SAM-Med3D adaptation
-- **Distributed training**: Scale with the Distributed ML Training Framework from this portfolio
+The progression is consistent: the EfficientNet-based encoder improves over the baseline, and adding attention produces the best validation performance.
+
+## What I Learned
+
+### 1. Architecture should be evaluated incrementally
+
+Changing one major component at a time makes it easier to understand where an improvement comes from.
+
+### 2. 3D segmentation is a memory-constrained problem
+
+Volumetric models require careful training strategies. Patch-based processing and mixed precision are practical tools for making 3D training feasible.
+
+### 3. Tumor-aware sampling matters
+
+When the background dominates the volume, sampling strategies that expose the model to tumor-containing regions can make training more useful.
+
+### 4. Attention can improve feature refinement
+
+In this experiment, adding attention to the EfficientNet-based U-Net produced the best validation Dice and IoU.
+
+## Conclusion
+
+The project demonstrates a straightforward progression from a **3D U-Net baseline → EfficientNet-based encoder → attention-enhanced architecture**.
+
+The final model reached a validation Dice of **0.8256** and IoU of **0.7575** on the project evaluation setup. The most important takeaway was not simply that the final architecture performed best, but that controlled architectural comparisons made the improvement understandable.
+
+## Future Work
+
+Potential extensions include evaluation of individual BraTS tumor regions, stronger volumetric architectures, self-supervised pretraining, multi-modal feature fusion, and more extensive validation across different datasets.
 
 ## Related Project
 
-This blog post accompanies the **Brain MRI Tumor Segmentation** project case study.
+This article accompanies the **Brain MRI Tumor Segmentation** project case study.
 
 [**View Project Case Study →**](/projects/brain-mri-segmentation)
 
 ## Resources
 
-- [BraTS Challenge](https://www.med.upenn.edu/cbica/brats2023/)
-- [MONAI Framework](https://monai.io/)
-- [3D U-Net Paper](https://arxiv.org/abs/1606.06650)
-- [Attention U-Net Paper](https://arxiv.org/abs/1804.03999)
-- [EfficientNet Paper](https://arxiv.org/abs/1905.11946)
+- [BraTS Challenge](https://www.med.upenn.edu/cbica/brats2020/)
+- [MONAI](https://monai.io/)
+- [3D U-Net](https://arxiv.org/abs/1606.06650)
+- [Attention U-Net](https://arxiv.org/abs/1804.03999)
+- [EfficientNet](https://arxiv.org/abs/1905.11946)
