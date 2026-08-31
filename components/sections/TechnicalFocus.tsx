@@ -1,60 +1,28 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  Network,
-  Bot,
-  Cpu,
-  BookOpen,
-} from "lucide-react";
+import { Brain, CloudSun, Database, Mic } from "lucide-react";
 
 const technicalFocus = [
   {
-    category: "Distributed ML",
-    icon: Network,
-    skills: [
-      "PyTorch DDP",
-      "gRPC",
-      "Distributed Training",
-      "Scheduling",
-      "Telemetry",
-      "NCCL / Gloo",
-    ],
+    category: "Medical AI",
+    icon: Brain,
+    skills: ["PyTorch", "3D U-Net", "EfficientNet", "CNN"],
   },
   {
-    category: "Agentic AI",
-    icon: Bot,
-    skills: [
-      "Multi-Agent Systems",
-      "LLM Orchestration",
-      "Ollama",
-      "Tool Use",
-      "Research Agents",
-      "Consensus",
-    ],
+    category: "Weather ML",
+    icon: CloudSun,
+    skills: ["Python", "XGBoost", "CatBoost", "LightGBM"],
   },
   {
-    category: "ML Engineering",
-    icon: Cpu,
-    skills: [
-      "PyTorch",
-      "Python",
-      "FastAPI",
-      "Docker",
-      "MLOps",
-      "Model Serving",
-    ],
+    category: "Speech AI",
+    icon: Mic,
+    skills: ["TensorFlow", "PyTorch", "Librosa", "MFCC", "CNN"],
   },
   {
-    category: "Research",
-    icon: BookOpen,
-    skills: [
-      "Computer Vision",
-      "Medical AI",
-      "Speech AI",
-      "ML Systems",
-      "IEEE Published",
-    ],
+    category: "Data & Systems",
+    icon: Database,
+    skills: ["SQLite", "SQL", "WSL", "Java (Basic)"],
   },
 ];
 
@@ -93,8 +61,8 @@ export function TechnicalFocus() {
                 </h3>
               </div>
               <ul className="space-y-1.5 sm:space-y-2">
-                {focus.skills.map((skill, idx) => (
-                  <li key={idx} className="text-xs sm:text-sm text-secondary leading-relaxed flex items-center gap-2">
+                {focus.skills.map((skill) => (
+                  <li key={skill} className="text-xs sm:text-sm text-secondary leading-relaxed flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-accent/50 flex-shrink-0" />
                     {skill}
                   </li>
