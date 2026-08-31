@@ -11,7 +11,7 @@ const sections = [
         <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
           <strong>VIT Bhopal</strong><span>Expected June 2027</span>
         </div>
-        <p>B.Tech, Computer Science and Engineering | CGPA 8.33/10</p>
+        <p>B.Tech, Computer Science and Engineering | CGPA 8.36/10</p>
       </div>
     ),
   },
@@ -103,7 +103,7 @@ export function ResumeClient() {
             <div className="mt-2 flex flex-wrap justify-center gap-x-4 gap-y-1 text-xs sm:text-sm">
               <span className="inline-flex items-center gap-1"><Phone className="w-3.5 h-3.5" /> +91-9116924202</span>
               <span className="inline-flex items-center gap-1"><Mail className="w-3.5 h-3.5" /> shreyanshshakya695@gmail.com</span>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="underline">LinkedIn</a>
+              <a href="https://www.linkedin.com/in/shreyansh-shakya-3b019022a" target="_blank" rel="noreferrer" className="underline">LinkedIn</a>
               <a href="https://github.com/ShreyanshShakya" target="_blank" rel="noreferrer" className="underline">GitHub</a>
             </div>
           </header>
