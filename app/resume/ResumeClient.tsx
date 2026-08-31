@@ -19,8 +19,8 @@ const sections = [
     title: "Technical Skills",
     content: (
       <div className="space-y-1.5">
-        <p><strong>Machine Learning:</strong> Python, TensorFlow, PyTorch, 3D U-Net, EfficientNet, CNN, XGBoost, CatBoost, LightGBM</p>
-        <p><strong>Audio &amp; Signal Processing:</strong> Librosa, MFCC</p>
+        <p><strong>Machine Learning &amp; Deep Learning:</strong> Python, TensorFlow, PyTorch, 3D U-Net, EfficientNet, CNN, XGBoost, CatBoost, LightGBM</p>
+        <p><strong>Audio:</strong> Librosa, MFCC</p>
         <p><strong>Databases &amp; Systems:</strong> SQLite, WSL, SQL</p>
         <p><strong>Programming:</strong> Java (Basic)</p>
       </div>
@@ -40,8 +40,9 @@ const sections = [
         <div>
           <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Coding Jr — AI Research Intern</strong><span>April 2025 – July 2025</span></div>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Conducted AI market research and competitive analysis on 50+ major market players to identify opportunities for product development and feature innovation.</li>
-            <li>Created 10+ technical presentations and research reports translating AI concepts into actionable business recommendations.</li>
+            <li>Conducted AI market research and competitive analysis across <strong>50+ major market players</strong> to identify product opportunities and feature innovations.</li>
+            <li>Created <strong>10+ technical presentations and research reports</strong>, translating AI concepts and model capabilities into actionable business recommendations.</li>
+            <li>Analyzed feedback and potential-client data to identify user pain points and support product prioritization with cross-functional teams.</li>
           </ul>
         </div>
       </div>
@@ -52,34 +53,40 @@ const sections = [
     content: (
       <div className="space-y-5">
         <div>
-          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Weather Prediction</strong><span>2025</span></div>
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>GridLock — Traffic Demand Prediction</strong><span>2026</span></div>
           <p className="text-xs mt-1">Python, XGBoost, CatBoost, LightGBM</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Built a city-specific weather prediction pipeline using gradient boosting models and approximately 10 years of historical weather observations.</li>
-            <li>Designed a scalable workflow for training models across thousands of cities while handling missing observations and temporal consistency.</li>
+            <li>Analyzed temporal distribution shift between training data and the competition's <strong>morning-commute</strong> evaluation regime.</li>
+            <li>Built a RoadType-aware ensemble routing Highways toward XGBoost, Residential roads toward LightGBM, and Streets toward CatBoost.</li>
+            <li>Evaluated ablations including day removal, model-weight perturbation, cluster sensitivity, and meta-stacking to diagnose validation failure modes.</li>
+            <li>Achieved a <strong>91.946 leaderboard score</strong>; post-mortem oracle analysis reported <strong>0.02167 MAE</strong> versus <strong>0.02996 MAE</strong> for the final Gate B solution.</li>
           </ul>
         </div>
         <div>
-          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Brain Tumor Segmentation</strong><span>2025 – 2026</span></div>
-          <p className="text-xs mt-1">Python, PyTorch, TensorFlow, EfficientNet, 3D U-Net</p>
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Weather Prediction</strong><span>2025 – 2026</span></div>
+          <p className="text-xs mt-1">Python, XGBoost</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Developed and evaluated 3D architectures for brain tumor segmentation on the BraTS dataset, including baseline 3D U-Net and EfficientNet-based models.</li>
-            <li>Improved validation Dice from 0.8057 to 0.8256 using an attention-enhanced EfficientNet architecture with patch-based training and mixed precision.</li>
+            <li>Built a city-specific next-day average temperature forecasting pipeline using temporal, lag, and rolling-window features.</li>
+            <li>Designed a Kaggle → XGBoost → Hugging Face Model Hub → FastAPI → Gradio workflow for training, model storage, and serving.</li>
+            <li>Implemented resumable model verification across <strong>4,408 city datasets</strong>; the multi-city pipeline is configured for up to 5,000 cities.</li>
           </ul>
         </div>
         <div>
-          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Emotion Recognition</strong><span>2025</span></div>
-          <p className="text-xs mt-1">Python, TensorFlow, PyTorch, CNN, MFCC, Librosa</p>
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Brain MRI Tumor Segmentation</strong><span>2025 – 2026</span></div>
+          <p className="text-xs mt-1">PyTorch, 3D U-Net, EfficientNet, CNN</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Built a speech emotion recognition pipeline using audio preprocessing, MFCC feature extraction, and CNN-based deep learning.</li>
-            <li>Authored research on speech emotion recognition accepted for presentation at IEEE DECoN 2025.</li>
+            <li>Compared baseline 3D U-Net, EfficientNet-based 3D U-Net, and EfficientNet + Attention 3D U-Net on BraTS 2020.</li>
+            <li>Improved validation performance from <strong>0.8057 to 0.8256 Dice</strong> and <strong>0.7349 to 0.7575 IoU</strong> across the architectural progression.</li>
+            <li>Used four MRI modalities (T1, T1ce, T2, FLAIR), tumor-aware patch sampling, mixed-precision training, and Dice + Cross-Entropy optimization.</li>
           </ul>
         </div>
         <div>
-          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Gridlock</strong><span>2026</span></div>
-          <p className="text-xs mt-1">Python, SQLite, SQL</p>
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Speech Emotion Recognition</strong><span>2025</span></div>
+          <p className="text-xs mt-1">TensorFlow, CNN, Librosa, MFCC</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Developed a grid-based application with modular state management and persistent SQLite-backed storage.</li>
+            <li>Developed a lightweight CNN-based speech emotion classifier using Librosa preprocessing and MFCC feature extraction.</li>
+            <li>Produced a deployment-oriented trained model of <strong>under 5 MB</strong> using Kaggle GPU resources.</li>
+            <li><strong>Published at IEEE DECoN 2025</strong> on lightweight CNN-based speech emotion recognition.</li>
           </ul>
         </div>
       </div>
