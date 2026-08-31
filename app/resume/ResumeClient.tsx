@@ -29,15 +29,13 @@ const sections = [
   {
     title: "Experience",
     content: (
-      <div className="space-y-5">
-        <div>
-          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Coding Jr — AI Research Intern</strong><span>April 2025 – July 2025</span></div>
-          <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Identified product opportunities across <strong>50+ major market players</strong> by conducting competitive AI market research and synthesizing findings into actionable recommendations.</li>
-            <li>Translated complex AI concepts into <strong>10+ technical presentations and research reports</strong> to support product and business decision-making.</li>
-            <li>Supported product prioritization by analyzing feedback and potential-client data to identify user pain points and emerging requirements.</li>
-          </ul>
-        </div>
+      <div>
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Coding Jr — AI Research Intern</strong><span>April 2025 – July 2025</span></div>
+        <ul className="list-disc pl-5 mt-2 space-y-1">
+          <li>Identified product opportunities across <strong>50+ major market players</strong> by conducting competitive AI market research and synthesizing findings into actionable recommendations.</li>
+          <li>Translated complex AI concepts into <strong>10+ technical presentations and research reports</strong> to support product and business decision-making.</li>
+          <li>Supported product prioritization by analyzing feedback and potential-client data to identify user pain points and emerging requirements.</li>
+        </ul>
       </div>
     ),
   },
@@ -49,32 +47,32 @@ const sections = [
           <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>GridLock — Traffic Demand Prediction</strong><span>2026</span></div>
           <p className="text-xs mt-1">Python, XGBoost, CatBoost, LightGBM</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Improved traffic-demand prediction to a <strong>91.946 leaderboard score</strong> by diagnosing temporal distribution shift and designing a RoadType-aware ensemble routing predictions to specialized boosting models.</li>
+            <li>Improved traffic-demand prediction to a <strong>91.946 leaderboard score</strong> by diagnosing temporal distribution shift and designing a RoadType-aware ensemble for specialized boosting models.</li>
             <li>Reduced test error to <strong>0.02996 MAE</strong> by routing Highways toward XGBoost, Residential roads toward LightGBM, and Streets toward CatBoost based on out-of-fold diagnostics.</li>
-            <li>Identified a <strong>0.02167 MAE oracle benchmark</strong> by evaluating model-level specialization and conducting post-competition error analysis across traffic regimes.</li>
+            <li>Identified a <strong>0.02167 MAE oracle benchmark</strong> through model specialization and post-competition error analysis across traffic regimes.</li>
           </ul>
         </div>
         <div>
           <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Weather Prediction</strong><span>2025 – 2026</span></div>
           <p className="text-xs mt-1">Python, XGBoost, FastAPI, Docker, Hugging Face, Gradio</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Built a next-day temperature forecasting pipeline by engineering temporal, lag, and rolling-window features from historical city-level weather observations.</li>
+            <li>Built next-day temperature forecasting by engineering temporal, lag, and rolling-window features from historical city-level weather observations.</li>
             <li>Scaled model training and serving to <strong>4,408 city datasets</strong> by developing a resumable Kaggle → XGBoost → Hugging Face Model Hub → FastAPI → Gradio workflow.</li>
             <li>Improved deployment reproducibility by containerizing the serving layer and implementing on-demand model loading and artifact management.</li>
           </ul>
         </div>
         <div>
           <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Brain MRI Tumor Segmentation</strong><span>2025 – 2026</span></div>
-          <p className="text-xs mt-1">PyTorch, 3D U-Net, EfficientNet, Attention, CNN</p>
+          <p className="text-xs mt-1">PyTorch, 3D U-Net, EfficientNet, Attention</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Improved validation Dice from <strong>0.8057 to 0.8256 (+2.47%)</strong> by replacing the baseline 3D U-Net encoder with EfficientNet-inspired blocks and adding attention mechanisms.</li>
-            <li>Improved IoU from <strong>0.7349 to 0.7575 (+3.08%)</strong> using four MRI modalities, tumor-aware patch sampling, and attention-guided feature refinement.</li>
-            <li>Established a reproducible training pipeline using mixed-precision optimization and Dice + Cross-Entropy loss on BraTS 2020.</li>
+            <li>Improved brain-tumor segmentation on BraTS 2020 by evaluating 3D U-Net, EfficientNet-based 3D U-Net, and attention-enhanced architectures, <strong>raising Dice from 0.8057 to 0.8256</strong>.</li>
+            <li>Improved tumor-region overlap by combining four MRI modalities with tumor-aware patch sampling and attention mechanisms, <strong>raising IoU from 0.7349 to 0.7575</strong>.</li>
+            <li>Established a reproducible 3D segmentation pipeline by applying mixed-precision optimization and Dice + Cross-Entropy loss on BraTS 2020.</li>
           </ul>
         </div>
         <div>
           <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Speech Emotion Recognition</strong><span>2025</span></div>
-          <p className="text-xs mt-1">Python, TensorFlow, CNN, Librosa, MFCC</p>
+          <p className="text-xs mt-1">TensorFlow, CNN, Librosa, MFCC</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li>Built a lightweight CNN-based speech emotion classifier by applying Librosa audio preprocessing and MFCC feature extraction.</li>
             <li>Reduced deployment footprint to <strong>under 5 MB</strong> by developing a compact trained model suitable for resource-constrained environments.</li>
