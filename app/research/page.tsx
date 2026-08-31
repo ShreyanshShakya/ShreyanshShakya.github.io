@@ -3,7 +3,7 @@ import { ResearchClient } from "./ResearchClient";
 
 export const metadata: Metadata = {
   title: "Research",
-  description: "Research in distributed machine learning, medical AI, speech emotion recognition, and agentic AI systems by Shreyansh Shakya. Includes IEEE publication on speech emotion recognition.",
+  description: "Research and publications by Shreyansh Shakya covering medical image segmentation, speech emotion recognition, weather prediction, and applied machine learning.",
 };
 
 export default function ResearchPage() {
