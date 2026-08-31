@@ -8,19 +8,19 @@ const stats = [
   {
     value: "90 GB",
     label: "Largest Dataset Processed",
-    detail: "Handled end-to-end in training and evaluation pipelines",
+    detail: "Historical weather data handled in the forecasting pipeline",
     icon: Database,
   },
   {
-    value: "4,300+",
-    label: "Cities Modeled",
-    detail: "City-specific weather forecasting across a decade of data",
+    value: "4,408",
+    label: "City Datasets",
+    detail: "City-level weather datasets verified in the training workflow",
     icon: MapPinned,
   },
   {
-    value: "7",
-    label: "Engineering Case Studies",
-    detail: "Distributed systems, agentic AI, ML, and research projects",
+    value: "4",
+    label: "Core ML Projects",
+    detail: "Weather prediction, speech emotion, brain MRI, and traffic demand modeling",
     icon: Layers3,
   },
   {
@@ -85,7 +85,6 @@ export function GithubStats() {
           })}
         </div>
 
-        {/* Contribution graph */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
