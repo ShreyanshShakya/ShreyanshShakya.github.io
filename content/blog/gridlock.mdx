@@ -1,0 +1,159 @@
+# GridLock: Learning from a Traffic Demand Prediction Hackathon
+
+GridLock started as a hackathon problem that looked, at first, like a conventional traffic-demand forecasting task: given information about roads, locations, time, weather, and traffic context, predict the number of vehicles at an intersection.
+
+The interesting part was not simply choosing a stronger model. The project became a study of **distribution shift, validation design, model specialization, and ensemble routing**.
+
+## The Problem
+
+The objective was to predict highly variable, intersection-level traffic demand across different road types and geographic clusters.
+
+The training data contained strong temporal and spatial variation. More importantly, the competition's leaderboard evaluated a specific **morning-commute distribution**, while the training data was heavily influenced by other traffic regimes, including midnight freight activity and evening traffic.
+
+That created a dangerous situation: a model could look better under conventional validation while actually becoming worse at the distribution used for evaluation.
+
+## Starting with an Ensemble
+
+The initial approach used three gradient-boosting models:
+
+- **CatBoost**
+- **XGBoost**
+- **LightGBM**
+
+The baseline ensemble achieved a leaderboard score of **91.84**.
+
+At this stage, the important question became: *why was the validation signal not reliably predicting leaderboard performance?*
+
+## The Validation Trap
+
+The experiments showed that the global validation metric was strongly affected by traffic regimes that did not match the leaderboard's morning-commute distribution.
+
+This became the central lesson of the project:
+
+> A validation strategy is only useful when it represents the distribution you ultimately care about.
+
+Several experiments improved local validation while making leaderboard performance worse. That included target encoding, pseudo-labeling, frequency encoding, cluster-sensitivity features, and meta-stacking.
+
+Instead of continuing to make the models more complicated, the project shifted toward understanding **where each model worked best**.
+
+## Model Specialization
+
+An Out-of-Fold residual analysis was used to examine model performance across **hour** and **RoadType**.
+
+The analysis revealed different strengths:
+
+- **XGBoost** performed best on Highways.
+- **LightGBM** performed best on Residential roads.
+- **CatBoost** performed best on Streets and was particularly strong in other traffic regimes.
+
+This suggested that a single static ensemble weight was not the best way to combine the models.
+
+## The Breakthrough: RoadType Gating
+
+The final approach used a domain-aware routing strategy. Instead of assigning the same blend to every prediction, the system used **RoadType** to bias the ensemble toward the model that performed best for that road regime.
+
+The final architecture is:
+
+```text
+                    +----------------+
+                    |  Feature Set   |
+                    +----------------+
+                             |
+       -----------------------------------------
+       |                   |                   |
+       ▼                   ▼                   ▼
+   CatBoost           XGBoost           LightGBM
+       |                   |                   |
+       -----------------------------------------
+                             |
+                      RoadType Gate
+                             |
+       -----------------------------------------
+       |                   |                   |
+       ▼                   ▼                   ▼
+    Street               Highway          Residential
+  CatBoost-biased      XGBoost-biased    LightGBM-biased
+       |                   |                   |
+       -----------------------------------------
+                             |
+                      Final Prediction
+```
+
+The final implementation trains all three models and creates road-type-specific prediction blends. For Highway predictions, XGBoost receives the largest weight; Residential predictions favor CatBoost in the implemented final script, while the broader model-diagnostic analysis identified LightGBM as particularly strong on Residential traffic. Street predictions are strongly CatBoost-weighted.
+
+This distinction is important: the final code is the source of truth for the exact deployed blend weights, while the experiments explain why model specialization was chosen.
+
+## What the Final Code Does
+
+The final training script:
+
+1. Loads the training and test data.
+2. Removes duplicate training rows.
+3. Fills missing categorical/context values with their modes.
+4. Extracts hour and minute from timestamps.
+5. Creates weekend and geographic latitude/longitude features from geohashes.
+6. Treats `geohash`, `RoadType`, and `LargeVehicles` as categorical features.
+7. Trains CatBoost, XGBoost, and LightGBM regressors.
+8. Generates predictions from all three models.
+9. Applies RoadType-dependent ensemble weights.
+10. Writes gated submission files for evaluation.
+
+The implementation uses **Python, CatBoost, XGBoost, LightGBM, Pandas, NumPy, and PyGeoHash**.
+
+## Results
+
+The repository documents the final Gate B solution with a leaderboard score of **91.946**.
+
+The post-mortem also reports a Gate B test MAE of **0.02996** and an Oracle Ensemble MAE of **0.02167**. The Oracle result was a retrospective analysis that selected the best model for each individual prediction; it was not the deployable solution.
+
+These results illustrate the main finding: there was still substantial intersection-level variability that could not be solved simply by making the ensemble more complex.
+
+## Failed Experiments Were Valuable
+
+One of the most useful parts of the project was learning from approaches that looked successful locally but failed on the target distribution.
+
+| Experiment | Local Validation | Target Evaluation |
+|---|---|---|
+| Target Encoding | Improved | Degraded |
+| Pseudo-Labeling | Improved | Degraded |
+| Frequency Encoding | Improved | Degraded |
+| Cluster Sensitivity | Improved | Degraded |
+| Meta-Stacking | Improved dramatically | Failed |
+
+These failures shifted the project away from feature and model complexity and toward **domain-aware validation and routing**.
+
+## Key Lessons
+
+### 1. Validation can become the real bottleneck
+
+A sophisticated model cannot compensate for a validation scheme that represents the wrong distribution.
+
+### 2. More complexity is not automatically better
+
+Target encoding, pseudo-labeling, and stacking improved some local metrics but failed to generalize to the target evaluation distribution.
+
+### 3. Model specialization can beat static averaging
+
+CatBoost, XGBoost, and LightGBM behaved differently across road and traffic regimes. Using that specialization explicitly produced a stronger final system.
+
+### 4. Domain knowledge can become architecture
+
+`RoadType` started as a feature, but the experiments showed it could also act as a routing signal for the ensemble.
+
+### 5. Post-mortems are part of the work
+
+The most useful result was not only the final score. Understanding why apparently strong approaches failed provided a clearer path for future modeling work.
+
+## Future Work
+
+Possible extensions include more robust domain-aware validation, learned routing functions, intersection-specific features, stronger spatial representations, and testing whether the same routing idea transfers to other traffic-demand datasets.
+
+## Related Project
+
+This article accompanies the **GridLock** project case study.
+
+[**View Project Case Study →**](/projects/gridlock)
+
+## Repository
+
+[**View the GridLock GitHub repository →**](https://github.com/ShreyanshShakya/Traffic-Demand-Prediction---GridLock-Hackathon2026)
