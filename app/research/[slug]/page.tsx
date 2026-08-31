@@ -20,7 +20,7 @@ const researchNotes = [
     slug: "weather-prediction",
     title: "City-Specific Weather Prediction with Gradient Boosting",
     date: "2025-04-10",
-    excerpt: "Lessons from building a weather prediction pipeline using historical observations and gradient boosting models across many cities.",
+    excerpt: "Lessons from building a city-specific weather prediction pipeline using historical observations and gradient boosting models.",
   },
 ];
 
