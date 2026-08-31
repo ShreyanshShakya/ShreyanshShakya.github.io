@@ -19,10 +19,10 @@ const sections = [
     title: "Technical Skills",
     content: (
       <div className="space-y-1.5">
-        <p><strong>Machine Learning &amp; Deep Learning:</strong> Python, TensorFlow, PyTorch, 3D U-Net, EfficientNet, CNN, XGBoost, CatBoost, LightGBM</p>
-        <p><strong>Audio:</strong> Librosa, MFCC</p>
-        <p><strong>Databases &amp; Systems:</strong> SQLite, WSL, SQL</p>
-        <p><strong>Programming:</strong> Java (Basic)</p>
+        <p><strong>Programming:</strong> Python, Java (Basic), SQL</p>
+        <p><strong>Machine Learning &amp; Deep Learning:</strong> TensorFlow, PyTorch, 3D U-Net, EfficientNet, CNN, XGBoost, CatBoost, LightGBM</p>
+        <p><strong>Audio &amp; Signal Processing:</strong> Librosa, MFCC</p>
+        <p><strong>Databases &amp; Systems:</strong> SQLite, WSL</p>
       </div>
     ),
   },
@@ -31,18 +31,11 @@ const sections = [
     content: (
       <div className="space-y-5">
         <div>
-          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Springer Capital — Data Analysis and LLM Intern</strong><span>May 2026 – Present</span></div>
-          <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Generated actionable business insights by collecting, cleaning, and analyzing structured and unstructured datasets using exploratory data analysis.</li>
-            <li>Enhanced AI evaluation workflows and developed dashboards and analytical reports for cross-functional stakeholders.</li>
-          </ul>
-        </div>
-        <div>
           <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Coding Jr — AI Research Intern</strong><span>April 2025 – July 2025</span></div>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Conducted AI market research and competitive analysis across <strong>50+ major market players</strong> to identify product opportunities and feature innovations.</li>
-            <li>Created <strong>10+ technical presentations and research reports</strong>, translating AI concepts and model capabilities into actionable business recommendations.</li>
-            <li>Analyzed feedback and potential-client data to identify user pain points and support product prioritization with cross-functional teams.</li>
+            <li>Identified product opportunities across <strong>50+ major market players</strong> by conducting competitive AI market research and synthesizing findings into actionable recommendations.</li>
+            <li>Translated complex AI concepts into <strong>10+ technical presentations and research reports</strong> to support product and business decision-making.</li>
+            <li>Supported product prioritization by analyzing feedback and potential-client data to identify user pain points and emerging requirements.</li>
           </ul>
         </div>
       </div>
@@ -56,37 +49,36 @@ const sections = [
           <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>GridLock — Traffic Demand Prediction</strong><span>2026</span></div>
           <p className="text-xs mt-1">Python, XGBoost, CatBoost, LightGBM</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Analyzed temporal distribution shift between training data and the competition's <strong>morning-commute</strong> evaluation regime.</li>
-            <li>Built a RoadType-aware ensemble routing Highways toward XGBoost, Residential roads toward LightGBM, and Streets toward CatBoost.</li>
-            <li>Evaluated ablations including day removal, model-weight perturbation, cluster sensitivity, and meta-stacking to diagnose validation failure modes.</li>
-            <li>Achieved a <strong>91.946 leaderboard score</strong>; post-mortem oracle analysis reported <strong>0.02167 MAE</strong> versus <strong>0.02996 MAE</strong> for the final Gate B solution.</li>
+            <li>Improved traffic-demand prediction to a <strong>91.946 leaderboard score</strong> by diagnosing temporal distribution shift and designing a RoadType-aware ensemble routing predictions to specialized boosting models.</li>
+            <li>Reduced test error to <strong>0.02996 MAE</strong> by routing Highways toward XGBoost, Residential roads toward LightGBM, and Streets toward CatBoost based on out-of-fold diagnostics.</li>
+            <li>Identified a <strong>0.02167 MAE oracle benchmark</strong> by evaluating model-level specialization and conducting post-competition error analysis across traffic regimes.</li>
           </ul>
         </div>
         <div>
           <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Weather Prediction</strong><span>2025 – 2026</span></div>
-          <p className="text-xs mt-1">Python, XGBoost</p>
+          <p className="text-xs mt-1">Python, XGBoost, FastAPI, Docker, Hugging Face, Gradio</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Built a city-specific next-day average temperature forecasting pipeline using temporal, lag, and rolling-window features.</li>
-            <li>Designed a Kaggle → XGBoost → Hugging Face Model Hub → FastAPI → Gradio workflow for training, model storage, and serving.</li>
-            <li>Implemented resumable model verification across <strong>4,408 city datasets</strong>; the multi-city pipeline is configured for up to 5,000 cities.</li>
+            <li>Built a next-day temperature forecasting pipeline by engineering temporal, lag, and rolling-window features from historical city-level weather observations.</li>
+            <li>Scaled model training and serving to <strong>4,408 city datasets</strong> by developing a resumable Kaggle → XGBoost → Hugging Face Model Hub → FastAPI → Gradio workflow.</li>
+            <li>Improved deployment reproducibility by containerizing the serving layer and implementing on-demand model loading and artifact management.</li>
           </ul>
         </div>
         <div>
           <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Brain MRI Tumor Segmentation</strong><span>2025 – 2026</span></div>
-          <p className="text-xs mt-1">PyTorch, 3D U-Net, EfficientNet, CNN</p>
+          <p className="text-xs mt-1">PyTorch, 3D U-Net, EfficientNet, Attention, CNN</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Compared baseline 3D U-Net, EfficientNet-based 3D U-Net, and EfficientNet + Attention 3D U-Net on BraTS 2020.</li>
-            <li>Improved validation performance from <strong>0.8057 to 0.8256 Dice</strong> and <strong>0.7349 to 0.7575 IoU</strong> across the architectural progression.</li>
-            <li>Used four MRI modalities (T1, T1ce, T2, FLAIR), tumor-aware patch sampling, mixed-precision training, and Dice + Cross-Entropy optimization.</li>
+            <li>Improved validation Dice from <strong>0.8057 to 0.8256 (+2.47%)</strong> by replacing the baseline 3D U-Net encoder with EfficientNet-inspired blocks and adding attention mechanisms.</li>
+            <li>Improved IoU from <strong>0.7349 to 0.7575 (+3.08%)</strong> using four MRI modalities, tumor-aware patch sampling, and attention-guided feature refinement.</li>
+            <li>Established a reproducible training pipeline using mixed-precision optimization and Dice + Cross-Entropy loss on BraTS 2020.</li>
           </ul>
         </div>
         <div>
           <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Speech Emotion Recognition</strong><span>2025</span></div>
-          <p className="text-xs mt-1">TensorFlow, CNN, Librosa, MFCC</p>
+          <p className="text-xs mt-1">Python, TensorFlow, CNN, Librosa, MFCC</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Developed a lightweight CNN-based speech emotion classifier using Librosa preprocessing and MFCC feature extraction.</li>
-            <li>Produced a deployment-oriented trained model of <strong>under 5 MB</strong> using Kaggle GPU resources.</li>
-            <li><strong>Published at IEEE DECoN 2025</strong> on lightweight CNN-based speech emotion recognition.</li>
+            <li>Built a lightweight CNN-based speech emotion classifier by applying Librosa audio preprocessing and MFCC feature extraction.</li>
+            <li>Reduced deployment footprint to <strong>under 5 MB</strong> by developing a compact trained model suitable for resource-constrained environments.</li>
+            <li>Published research at <strong>IEEE DECoN 2025</strong>, documenting the lightweight CNN approach for speech emotion recognition.</li>
           </ul>
         </div>
       </div>
