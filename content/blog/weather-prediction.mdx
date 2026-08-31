@@ -1,151 +1,126 @@
-Most weather ML projects train one global model. This project asked: what if each city gets its own?
+# Weather Prediction: From Thousands of Cities to a Deployable Forecasting System
+
+Weather forecasting is a good example of a problem where the machine-learning model is only one part of the engineering challenge. This project focused on building a city-specific forecasting workflow that could train models across thousands of Indian cities and expose the resulting models through a live prediction interface.
 
 ## The Problem
 
-Weather is inherently local. A model trained on global patterns misses:
-- Microclimates (coastal vs inland, urban heat islands)
-- Regional seasonality shifts
-- Topography-driven effects
-- Data quality variations by station
+The goal was to predict the **next day's average temperature** for individual cities. Instead of relying on a single model for every location, the project trains separate XGBoost models for individual city histories.
 
-But training 4,300+ models brings its own nightmare: **how to do it reliably, reproducibly, and without drowning in complexity**.
+The challenge quickly became one of scale: the dataset is large, the number of city models is large, and the training process needs to be repeatable and resumable.
 
 ## Dataset
 
-- **Source**: Historical weather observations (public meteorological data)
-- **Span**: ~10 years (2014-2024)
-- **Cities**: 4,300+ globally
-- **Variables**: Temperature, humidity, precipitation, pressure, wind, temporal features
-- **Size**: ~90 GB after preprocessing
-- **Challenges**: Missing data, station moves, unit inconsistencies, temporal gaps
+The project uses the **Indian 5000 Cities Weather Data** dataset from Kaggle. The repository describes approximately **90 GB of historical weather data covering 6,000+ Indian cities**. A verification run in the training pipeline found **4,408 city datasets** in the available input data.
 
-## Architecture: Local Models, Global Pipeline
+The system works with historical observations and transforms them into time-based and lag features before training the city models.
 
-```
-Raw Data → Cleaning → Feature Eng → City Partition → 4,300+× XGBoost → Evaluation → Predictions
-```
+## Architecture: The GitHub README Design
 
-### Key Design Decision: One Model Per City
+The final system follows the architecture documented in the project repository:
 
-Instead of one massive model with city embeddings:
-- **Each city trains independently** on its own history
-- **Identical pipeline** applied to every city (reproducibility)
-- **City-specific features**: Lat/long, elevation, climate zone, urbanization
-- **Shared feature engineering code** but independent model artifacts
-
-### Pipeline Stages
-
-1. **Data Collection & Cleaning**
-   - Parallel download/ingestion per station
-   - Missing value interpolation (time-aware)
-   - Unit normalization, outlier detection
-   - Quality flags from source metadata
-
-2. **Feature Engineering** (per city, identical logic)
-   - Lag features: t-1, t-24, t-168 (hour, day, week)
-   - Rolling statistics: 7d/30d mean, std, min, max
-   - Seasonal encodings: sin/cos day-of-year, hour-of-day
-   - City static features: lat, lon, elevation, Köppen climate class
-
-3. **City-wise Partitioning**
-   - Group by city ID
-   - Chronological train/val/test split (no leakage!)
-   - Minimum data threshold: 2+ years for training
-
-4. **Model Training** (4,300+× XGBoost)
-   - Objective: `reg:squarederror` (temperature) / `reg:logistic` (precip probability)
-   - Early stopping on validation
-   - Hyperparameters: shared defaults, city-specific opt for top 100 cities
-   - Output: model artifact + feature importance + validation metrics
-
-5. **Evaluation & Monitoring**
-   - Per-city MAE, RMSE, R²
-   - Aggregate statistics (median, 25th/75th percentile)
-   - Failure detection: cities with < threshold data or > threshold error
-
-## Engineering at Scale
-
-### Data Organization
-
-```
-data/
-├── raw/           # 90 GB, partitioned by year/month
-├── processed/     # Parquet, partitioned by city
-├── features/      # Engineered features, city-partitioned
-├── models/        # 4,300+ .json/.pkl files
-└── metrics/       # CSV per city + aggregate reports
+```text
+[Kaggle Dataset]
+        ↓
+[Kaggle Training Pipeline]
+        ↓
+[Hugging Face Model Hub]
+        ↓
+[FastAPI Server]
+        ↓
+[Gradio UI]
 ```
 
-**Parquet + partitioning** was the single best decision—columnar, compressed, predicate pushdown for city filtering.
+### 1. Kaggle Dataset
 
-### Automation
+The historical weather dataset is mounted through Kaggle. This avoids treating the entire dataset as an ordinary local download and makes the large input available to the training environment.
 
-- **Snakemake** pipeline: declarative, incremental, resumable
-- **Parallel execution**: 50-100 concurrent city trainings (CPU-bound XGBoost)
-- **Checkpointing**: Each city independent—failure doesn't cascade
-- **Idempotency**: Re-run safely, only rebuilds changed cities
+### 2. Kaggle Training Pipeline
 
-### Resource Profile (Development Environment)
+The training workflow discovers city CSV files, processes each city's history, creates features, trains an XGBoost regressor, evaluates it with mean absolute error, and prepares the resulting artifacts for upload.
 
-> **Note**: The following reflects the development/experimental environment used during this project. Production deployments would use different infrastructure.
+The repository also contains verification logic that compares cities found in the dataset with model folders already present in the model registry. This makes the large training job resumable instead of requiring every city to be retrained from scratch.
 
-- **Compute**: 32-core VM, 128 GB RAM (XGBoost is CPU-happy)
-- **Time**: ~6 hours full pipeline (mostly feature engineering)
-- **Storage**: 90 GB raw → 45 GB processed → 2 GB models
+### 3. Hugging Face Model Hub
 
-## Results (Development Measurements)
+Trained city models are uploaded to a centralized Hugging Face Model Hub repository. The training notebook stores the XGBoost model as `model.json` together with metadata containing the city name, validation MAE, and feature list.
 
-| Metric | Global Model (Baseline) | Per-City Models |
-|--------|------------------------|-----------------|
-| Median MAE (temp) | 2.1°C | **1.6°C** |
-| 25th percentile MAE | 1.4°C | **1.1°C** |
-| Cities with MAE < 1.5°C | 32% | **68%** |
-| Training time | 45 min | 6 hours |
-| Model artifacts | 1 (50 MB) | 4,300+ (2 GB) |
+### 4. FastAPI Server
 
-> **Disclaimer**: The numerical results above are **development measurements** from the experimental pipeline run, not controlled benchmark results with statistical validation. They demonstrate the directional improvement of the local-model approach but should not be cited as formal benchmarks.
+The serving layer is a Dockerized FastAPI application. The documented design dynamically loads models when required and caches them so that frequently requested models do not need to be loaded repeatedly.
 
-**Local models won**—especially for cities with distinct patterns (coastal, mountain, tropical).
+### 5. Gradio UI
 
-## When Local Models Work (and Don't)
+A Gradio interface provides the user-facing forecasting experience and communicates with the prediction service.
 
-| Scenario | Local Better? |
-|----------|---------------|
-| Strong local geography effects | ✅ Yes |
-| Sufficient local history (>2 years) | ✅ Yes |
-| Sparse data (\<6 months) | ❌ No (global/transfer better) |
-| Rapidly changing climate | ⚠️ Needs frequent retrain |
-| Real-time ensemble needs | ⚠️ Latency vs accuracy tradeoff |
+## Feature Engineering
 
-## Lessons Learned
+The training pipeline uses a deliberately simple and repeatable feature-engineering process. For each city it:
 
-1. **Data organization > model choice**: Parquet partitioning made 4,300-city iteration trivial
-2. **Pipeline simplicity scales**: Identical per-city logic > complex conditional branching
-3. **Automate everything**: Manual steps don't survive 4,300 iterations
-4. **Monitor per-city, alert on aggregate**: Don't drown in 4,300 dashboards
-5. **Retraining is the real product**: New data arrives daily; pipeline must re-run weekly
-6. **Global features help local models**: Climate zone, elevation as features > separate models per zone
+- Converts the date column into a datetime index
+- Adds month, day of year, day of week, and year
+- Adds temperature lag features for the previous one and two observations
+- Adds a previous precipitation feature when precipitation is available
+- Calculates a seven-observation rolling mean of temperature
+- Removes incomplete rows before training
+
+The training workflow then selects numeric features and performs a chronological 80/20 train-test split without shuffling.
+
+## Training the City Models
+
+The single-city training workflow uses an **XGBoost Regressor** configured with:
+
+```text
+n_estimators = 500
+learning_rate = 0.05
+max_depth = 6
+```
+
+For each city, the pipeline trains the model, calculates mean absolute error, saves the model as JSON, writes metadata, and uploads the artifacts to the Hugging Face model repository.
+
+The multi-city pipeline is configured to process up to 5,000 cities. The verification workflow recorded 4,408 cities in the dataset and checks which corresponding model folders have already been uploaded.
+
+## Engineering Challenges
+
+### Working with a Large Dataset
+
+The project uses Kaggle's mounted storage for the large weather dataset. This makes it possible to process the data in the environment where the training pipeline runs.
+
+### Managing Thousands of Models
+
+A city-specific modeling strategy produces a large number of independent model artifacts. A centralized model repository and verification process make those artifacts easier to organize and track.
+
+### Making Training Resumable
+
+The training workflow checks which city models have already been uploaded and identifies missing models. This is important because a failure or interruption should not force the entire multi-city job to start again.
+
+### Serving Many Models
+
+A conventional application that loads every city model at startup would not be a practical design for a large model collection. The documented API architecture instead uses on-demand model loading and caching.
+
+## API
+
+The deployed architecture exposes a `/predict` endpoint. The repository README specifies that a request should provide at least seven days of historical weather data and returns the predicted next-day average temperature.
+
+## What I Learned
+
+1. **Model training is only one part of an ML system.** Once the number of models becomes large, storage, verification, and serving become important engineering problems.
+2. **Repeatability matters at scale.** A workflow that works for one city needs automation before it can reliably handle thousands.
+3. **Model management becomes part of the application.** A centralized registry and a way to identify missing models are essential when every city has its own artifact.
+4. **Serving architecture has to account for model count.** On-demand loading and caching provide a practical way to work with many models.
+5. **Simple feature engineering can still be useful.** Consistent temporal and lag features provide a reproducible baseline across cities.
 
 ## Future Work
 
-- **Deep learning time-series**: Temporal Fusion Transformers, N-BEATS for cities with rich history
-- **Spatial modeling**: Graph neural networks over city adjacency
-- **Distributed training**: Dask/Ray for horizontal scaling beyond single VM
-- **Automated retraining**: Airflow/Prefect scheduled pipeline with drift detection
-- **Cloud-native deployment**: SageMaker/Vertex AI for managed training + serving
-- **Real-time API**: FastAPI + model registry for low-latency forecasting
-- **IoT integration**: Personal weather station data fusion
-- **Extreme event focus**: Separate models for heatwaves, storms, freezes
+Possible extensions include experimenting with additional forecasting models, improving feature engineering, adding stronger model monitoring, and further automating retraining and deployment.
 
 ## Related Project
 
-This blog post accompanies the **Weather Prediction at Scale** project case study.
+This article accompanies the **Weather Prediction** project case study.
 
 [**View Project Case Study →**](/projects/weather-prediction)
 
 ## Resources
 
 - [XGBoost Documentation](https://xgboost.readthedocs.io/)
-- [Snakemake Workflow](https://snakemake.readthedocs.io/)
-- [Parquet Format](https://parquet.apache.org/)
-- [Weather Data Sources: NOAA, ECMWF, Open-Meteo](https://open-meteo.com/)
+- [Kaggle Indian 5000 Cities Weather Dataset](https://www.kaggle.com/datasets/mukeshdevrath007/indian-5000-cities-weather-data)
+- [Hugging Face Model Hub](https://huggingface.co/)
