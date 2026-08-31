@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { featuredProjects } from "@/data/projects";
+import { architectures } from "@/data/architectures";
 import { ArchitectureDiagram } from "@/components/ui/ArchitectureDiagram";
 
 export function ProjectsClient() {
@@ -18,8 +19,7 @@ export function ProjectsClient() {
           Projects
         </h1>
         <p className="text-secondary text-lg mb-16 max-w-2xl">
-          Engineering case studies — each project is documented with the
-          problem, architecture, challenges, benchmarks, and lessons learned.
+          Selected machine learning and software projects.
         </p>
       </motion.div>
 
@@ -55,9 +55,12 @@ export function ProjectsClient() {
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </div>
-                <div className="w-full md:w-1/3 aspect-[4/3] rounded-lg border border-border/50 bg-background p-3 shrink-0">
-                  <ArchitectureDiagram projectId={project.id} isHovered={false} />
-                </div>
+
+                {architectures[project.id] && (
+                  <div className="w-full md:w-1/3 aspect-[4/3] rounded-lg border border-border/50 bg-background p-3 shrink-0">
+                    <ArchitectureDiagram projectId={project.id} isHovered={false} />
+                  </div>
+                )}
               </div>
             </Link>
           </motion.div>
