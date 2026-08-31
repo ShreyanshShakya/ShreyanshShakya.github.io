@@ -19,12 +19,10 @@ const sections = [
     title: "Technical Skills",
     content: (
       <div className="space-y-1.5">
-        <p><strong>Programming Languages:</strong> Java, Python, SQL</p>
-        <p><strong>Core Computer Science:</strong> Data Structures &amp; Algorithms, Oops, DBMS, Operating Systems, Computer Networks</p>
-        <p><strong>AI &amp; Machine Learning:</strong> PyTorch, TensorFlow, Scikit-Learn, CNN, LSTM, BiLSTM, U-Net, Computer Vision, Feature Engineering, Model Evaluation</p>
-        <p><strong>Generative AI:</strong> LLMs, Prompt Engineering, AI Agents, LangChain, RAG, OpenAI APIs</p>
-        <p><strong>Tools &amp; Technologies:</strong> Git, GitHub, Docker, FastAPI, Hugging Face, Jupyter Notebook, VS Code</p>
-        <p><strong>Data Science:</strong> Pandas, NumPy, Exploratory Data Analysis, Statistical Analysis</p>
+        <p><strong>Machine Learning:</strong> Python, TensorFlow, PyTorch, 3D U-Net, EfficientNet, CNN, XGBoost, CatBoost, LightGBM</p>
+        <p><strong>Audio &amp; Signal Processing:</strong> Librosa, MFCC</p>
+        <p><strong>Databases &amp; Systems:</strong> SQLite, WSL, SQL</p>
+        <p><strong>Programming:</strong> Java (Basic)</p>
       </div>
     ),
   },
@@ -35,8 +33,8 @@ const sections = [
         <div>
           <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Springer Capital — Data Analysis and LLM Intern</strong><span>May 2026 – Present</span></div>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Generated actionable business insights by collecting, cleaning, and analyzing structured and unstructured datasets using exploratory data analysis (EDA), supporting data-driven decision making.</li>
-            <li>Enhanced Generative AI solutions by designing prompt engineering and evaluation workflows, integrating LLM APIs, and developing dashboards and analytical reports for cross-functional stakeholders.</li>
+            <li>Generated actionable business insights by collecting, cleaning, and analyzing structured and unstructured datasets using exploratory data analysis.</li>
+            <li>Enhanced AI evaluation workflows and developed dashboards and analytical reports for cross-functional stakeholders.</li>
           </ul>
         </div>
         <div>
@@ -54,30 +52,34 @@ const sections = [
     content: (
       <div className="space-y-5">
         <div>
-          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>AgentForge: Autonomous Multi-Agent Software Engineering Platform</strong><span>April 2026 – June 2026</span></div>
-          <p className="text-xs mt-1">Python, Ollama, Qwen, LLMs, Multi-Agent Systems, Prompt Engineering, Agent Orchestration, Software Engineering, Pytest</p>
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Weather Prediction</strong><span>2025</span></div>
+          <p className="text-xs mt-1">Python, XGBoost, CatBoost, LightGBM</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Automated end-to-end software development by building a fully local multi-agent platform that converts natural language requirements into implementation-ready projects using Analyst, Architect, Planner, Critic, Coder and Fixer agents.</li>
-            <li>Improved software quality by designing a consensus-driven orchestration pipeline with dependency-aware planning, context-aware code generation, automated compilation, pytest-based testing, and iterative self-repair.</li>
-            <li>Enabled offline AI-assisted development through custom agent orchestration, MD5 response caching, dependency-aware context management, and Ollama-powered local LLM inference for reproducible software generation.</li>
+            <li>Built a city-specific weather prediction pipeline using gradient boosting models and approximately 10 years of historical weather observations.</li>
+            <li>Designed a scalable workflow for training models across thousands of cities while handling missing observations and temporal consistency.</li>
           </ul>
         </div>
         <div>
-          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Brain Tumor Classification and Segmentation</strong><span>October 2025 – January 2026</span></div>
-          <p className="text-xs mt-1">Python, PyTorch, TensorFlow, EfficientNet, 3D U-Net, MRI Processing, Medical AI, BraTS 2020, Mixed Precision</p>
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Brain Tumor Segmentation</strong><span>2025 – 2026</span></div>
+          <p className="text-xs mt-1">Python, PyTorch, TensorFlow, EfficientNet, 3D U-Net</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Improved MRI brain tumor segmentation by developing and evaluating three 3D architectures—Baseline U-Net, EfficientNet U-Net, and Attention-EfficientNet U-Net—on the BraTS 2020 dataset.</li>
-            <li>Enhanced volumetric learning by implementing multimodal MRI preprocessing, tumor-aware patch sampling, mixed-precision training, and Dice + Cross-Entropy optimization for large-scale 3D segmentation.</li>
-            <li>Increased segmentation performance from 80.57% Dice to 82.56% Dice (75.47% IoU) while conducting comparative analysis of EfficientNet encoders and attention mechanisms.</li>
+            <li>Developed and evaluated 3D architectures for brain tumor segmentation on the BraTS dataset, including baseline 3D U-Net and EfficientNet-based models.</li>
+            <li>Improved validation Dice from 0.8057 to 0.8256 using an attention-enhanced EfficientNet architecture with patch-based training and mixed precision.</li>
           </ul>
         </div>
         <div>
-          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Speech Emotion Recognition</strong><span>March 2025 – July 2025</span></div>
-          <p className="text-xs mt-1">Python, TensorFlow, Keras, CNN, MFCC, Librosa, Speech AI, Audio Signal Processing, Deep Learning</p>
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Emotion Recognition</strong><span>2025</span></div>
+          <p className="text-xs mt-1">Python, TensorFlow, PyTorch, CNN, MFCC, Librosa</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Recognized emotions from speech by developing a CNN-BiLSTM model using MFCC feature extraction, achieving 72% classification accuracy on the RAVDESS and TESS datasets.</li>
-            <li>Built a robust audio processing pipeline for feature extraction, preprocessing, and model training on high-dimensional speech datasets using TensorFlow and Librosa.</li>
-            <li>Validated the research contribution by authoring a 6-page research paper accepted for presentation at the IEEE Intl. Conference on Data, Energy and Communication Networks (DECON).</li>
+            <li>Built a speech emotion recognition pipeline using audio preprocessing, MFCC feature extraction, and CNN-based deep learning.</li>
+            <li>Authored research on speech emotion recognition accepted for presentation at IEEE DECoN 2025.</li>
+          </ul>
+        </div>
+        <div>
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-1"><strong>Gridlock</strong><span>2026</span></div>
+          <p className="text-xs mt-1">Python, SQLite, SQL</p>
+          <ul className="list-disc pl-5 mt-2 space-y-1">
+            <li>Developed a grid-based application with modular state management and persistent SQLite-backed storage.</li>
           </ul>
         </div>
       </div>
@@ -97,7 +99,6 @@ export function ResumeClient() {
             <Download className="w-4 h-4" /> Save / Print PDF
           </button>
         </div>
-
         <article className="bg-white text-slate-900 rounded-xl shadow-2xl p-7 sm:p-10 print:shadow-none print:rounded-none print:p-8 print:text-black text-[13px] leading-[1.45]">
           <header className="text-center border-b border-slate-300 pb-4 mb-5">
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Shreyansh Shakya</h2>
@@ -109,7 +110,6 @@ export function ResumeClient() {
               <a href="https://github.com/ShreyanshShakya" target="_blank" rel="noreferrer" className="underline">GitHub</a>
             </div>
           </header>
-
           <div className="space-y-5">
             {sections.map((section) => (
               <section key={section.title}>
