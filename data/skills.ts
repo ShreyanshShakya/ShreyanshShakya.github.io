@@ -5,18 +5,18 @@ export const skills = [
   },
   {
     category: "Machine Learning",
-    items: ["XGBoost", "CatBoost", "LightGBM"],
+    items: ["XGBoost", "CatBoost", "LightGBM", "Ensemble Learning", "Feature Engineering"],
   },
   {
-    category: "Deep Learning & Computer Vision",
+    category: "Deep Learning",
     items: ["TensorFlow", "PyTorch", "CNN", "3D U-Net", "EfficientNet"],
   },
   {
-    category: "Audio & Signal Processing",
-    items: ["Librosa", "MFCC"],
+    category: "Data & Model Evaluation",
+    items: ["Pandas", "NumPy", "Data Preprocessing", "Exploratory Data Analysis", "MAE", "Dice Score", "IoU", "Ablation Studies"],
   },
   {
-    category: "Databases & Systems",
-    items: ["SQLite", "WSL"],
+    category: "ML Deployment & Tools",
+    items: ["FastAPI", "Docker", "Hugging Face", "Gradio", "SQLite", "WSL"],
   },
 ];
