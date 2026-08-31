@@ -3,7 +3,7 @@ import { ProjectCard } from "@/components/cards/ProjectCard";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-const FEATURED_COUNT = 3;
+const FEATURED_COUNT = 4;
 
 export function FeaturedProjects() {
   const featured = featuredProjects.slice(0, FEATURED_COUNT);
