@@ -1,34 +1,26 @@
 export const skills = [
   {
-    category: "Distributed ML",
-    items: ["PyTorch", "DDP", "NCCL", "Gloo", "gRPC", "Cluster Management", "Scheduling", "Telemetry"],
+    category: "Programming",
+    items: ["Python", "SQL", "Java (Basic)"],
   },
   {
-    category: "LLM Applications",
-    items: ["Ollama", "Semantic Scholar", "OpenAlex", "Agent Orchestration", "Prompt Engineering"],
+    category: "Machine Learning",
+    items: ["XGBoost", "CatBoost", "LightGBM", "Feature Engineering", "Time Series"],
   },
   {
-    category: "Medical AI",
-    items: ["3D U-Net", "Attention U-Net", "BraTS", "Dice Loss", "Mixed Precision", "MONAI", "nibabel", "EfficientNet"],
+    category: "Deep Learning",
+    items: ["PyTorch", "TensorFlow", "CNN", "3D U-Net", "EfficientNet"],
   },
   {
-    category: "Speech AI",
-    items: ["Librosa", "MFCC", "CNN", "TensorFlow", "PyTorch", "Real-time Inference", "RAVDESS", "CREMA-D"],
+    category: "Audio & Medical AI",
+    items: ["Librosa", "MFCC", "BraTS", "MONAI", "Image Segmentation"],
   },
   {
-    category: "Data Engineering",
-    items: ["XGBoost", "Pandas", "NumPy", "Scikit-learn", "Time Series", "Feature Engineering", "90GB Pipeline"],
+    category: "Data & Evaluation",
+    items: ["Pandas", "NumPy", "Scikit-learn", "Exploratory Data Analysis", "Model Evaluation"],
   },
   {
-    category: "Cloud & Infra",
-    items: ["AWS", "Docker", "SQLite", "Telemetry", "Scheduling", "EC2", "Bedrock", "Linux", "WSL2", "Git", "GitHub"],
-  },
-  {
-    category: "Languages",
-    items: ["SQL", "C++", "Java", "JavaScript"],
-  },
-  {
-    category: "Research & Software Engineering",
-    items: ["Literature Review", "Experimental Design", "Model Benchmarking", "Reproducible Research", "Technical Documentation", "System Design", "Modular Architecture", "Code Review", "Testing", "Performance Optimization"],
+    category: "Deployment & Tools",
+    items: ["FastAPI", "Docker", "Gradio", "SQLite", "WSL"],
   },
 ];
