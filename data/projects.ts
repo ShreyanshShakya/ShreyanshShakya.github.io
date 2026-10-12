@@ -111,4 +111,61 @@ export const featuredProjects = [
     demo: "",
     relatedProjects: ["weather-prediction", "speech-emotion-recognition"],
   },
+
+  {
+    id: "agentforge",
+    title: "AgentForge — Multi-Agent Software Engineering Assistant",
+    description:
+      "Built a locally runnable multi-agent assistant that coordinates specialized agents to analyze tasks, propose software architecture, critique solutions, plan implementation, and synthesize a final response.",
+    tags: ["Python", "Ollama", "LLMs", "Multi-Agent Systems", "Code Generation"],
+    link: "/projects/agentforge",
+    problem:
+      "Software engineering tasks often require separate stages of analysis, design, review, and planning, which can be difficult to coordinate in a single prompt.",
+    architecture:
+      "User task → Analyst → Architect → Critic → Planner → Consensus → consolidated response, using locally hosted Ollama models.",
+    challenges: [
+      "Defined responsibilities for specialized agents",
+      "Coordinated outputs across sequential stages",
+      "Used a local model runtime to support development workflows",
+      "Structured the final response around review and consensus",
+    ],
+    benchmarks:
+      "This is a local prototype focused on agent orchestration and workflow design; no quantitative productivity or code-quality improvement is claimed.",
+    lessons: [
+      "Explicit agent responsibilities make multi-step workflows easier to inspect",
+      "Critique and planning stages can expose gaps before implementation",
+      "Local inference introduces practical model-size and hardware constraints",
+    ],
+    github: "https://github.com/ShreyanshShakya/agentforge",
+    demo: "",
+    relatedProjects: ["distributed-ml-training", "personal-coding-assistant"],
+  },
+  {
+    id: "distributed-ml-training",
+    title: "Distributed ML Training Framework",
+    description:
+      "Developed an MVP for coordinating machine-learning training across heterogeneous computers, combining PyTorch Distributed Data Parallel with node registration, telemetry, and job scheduling.",
+    tags: ["Python", "PyTorch DDP", "gRPC", "SQLite", "Distributed Systems", "Scheduling"],
+    link: "/projects/distributed-ml-training",
+    problem:
+      "Consumer laptops have uneven CPU, RAM, and GPU capabilities, making it challenging to coordinate training jobs and monitor available compute resources across a local network.",
+    architecture:
+      "Node agents → gRPC-based cluster management and telemetry → SQLite state and job queue → resource-aware scheduler → PyTorch DDP training.",
+    challenges: [
+      "Implemented node registration and periodic hardware telemetry",
+      "Connected job submission with a persistent queue",
+      "Added basic resource-aware scheduling across registered nodes",
+      "Tested local multi-process execution and simulated multi-node workflows",
+    ],
+    benchmarks:
+      "MVP validation focused on cluster orchestration and telemetry. Multi-node behavior was partly simulated; do not present it as a production-scale distributed training benchmark.",
+    lessons: [
+      "Cluster orchestration and model-gradient synchronization are separate responsibilities",
+      "Telemetry is needed to make resource-aware scheduling decisions",
+      "Networking, process startup, and heterogeneous hardware complicate distributed training",
+    ],
+    github: "https://github.com/ShreyanshShakya/Distributed-ML-Training",
+    demo: "",
+    relatedProjects: ["agentforge", "weather-prediction"],
+  },
 ];
