@@ -37,7 +37,7 @@ export type NodeKind =
   | "system";
 
 export const architectures: Record<string, ArchitectureDefinition> = {
-  "distributed-ml-framework": {
+  "distributed-ml-training": {
     title: "Distributed ML Training Framework",
     subtitle: "Cluster management + PyTorch DDP worker plane",
 
@@ -680,6 +680,81 @@ export const architectures: Record<string, ArchitectureDefinition> = {
 
     footer:
       "Published research focuses on data augmentation and lightweight CNN-based speech emotion recognition.",
+  },
+
+
+  "gridlock": {
+    title: "GridLock — Traffic Demand Prediction",
+    subtitle: "Feature engineering + gradient-boosting model comparison",
+
+    nodes: [
+      {
+        id: "traffic-data",
+        title: "Traffic Data",
+        subtitle: "Time + road attributes",
+        kind: "input",
+        x: 150,
+        y: 240,
+        width: 190,
+      },
+      {
+        id: "features",
+        title: "Feature Engineering",
+        subtitle: "Temporal + road-type features",
+        kind: "process",
+        x: 375,
+        y: 240,
+        width: 200,
+      },
+      {
+        id: "models",
+        title: "Boosting Models",
+        subtitle: "XGBoost / CatBoost / LightGBM",
+        kind: "model",
+        x: 610,
+        y: 240,
+        width: 220,
+      },
+      {
+        id: "blend",
+        title: "Error Analysis + Blending",
+        subtitle: "Road-type-aware experiments",
+        kind: "control",
+        x: 850,
+        y: 240,
+        width: 210,
+      },
+      {
+        id: "prediction",
+        title: "Demand Prediction",
+        subtitle: "Traffic demand estimates",
+        kind: "output",
+        x: 1080,
+        y: 240,
+        width: 190,
+      },
+      {
+        id: "validation",
+        title: "Validation",
+        subtitle: "Holdout error + distribution shift",
+        kind: "data",
+        x: 610,
+        y: 430,
+        width: 230,
+      },
+    ],
+
+    edges: [
+      { from: "traffic-data", to: "features", color: "primary" },
+      { from: "features", to: "models", color: "secondary" },
+      { from: "models", to: "blend", color: "success" },
+      { from: "blend", to: "prediction", color: "success" },
+      { from: "models", to: "validation", color: "secondary" },
+      { from: "validation", to: "blend", label: "error analysis", dashed: true, color: "warning" },
+    ],
+
+    footer:
+      "Model selection and blending are evaluated against held-out data; no leaderboard score is assumed by this diagram.",
   },
 
   "weather-prediction": {
