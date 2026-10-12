@@ -1,24 +1,15 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  Network,
-  MessageSquare,
-  Brain,
-  HeartPulse,
-  Zap,
-  Mic,
-  FileText,
-} from "lucide-react";
-import { ExternalLink } from "lucide-react";
+import { HeartPulse, Mic, CloudSun, FileText, ExternalLink } from "lucide-react";
 
 const researchProjects = [
   {
     title: "Speech Emotion Recognition",
     description:
-      "Real-time speech emotion recognition pipeline with enhanced data augmentation and lightweight CNN. Published at IEEE DECoN 2025.",
+      "Research on speech emotion recognition using data augmentation and a lightweight convolutional neural network.",
     icon: Mic,
-    tags: ["CNN-RNN", "MFCC", "RAVDESS", "CREMA-D", "Real-time"],
+    tags: ["Speech AI", "CNN", "MFCC", "Audio Processing"],
     publication: {
       title: "Speech Emotion Recognition: A Human-Centric Framework with Enhanced Data Augmentation and Lightweight CNN",
       venue: "IEEE DECoN 2025",
@@ -26,39 +17,18 @@ const researchProjects = [
     },
   },
   {
-    title: "Distributed AI Infrastructure",
+    title: "Medical Image Segmentation",
     description:
-      "Scaling training and inference across heterogeneous compute clusters with minimal communication overhead.",
-    icon: Network,
-    tags: ["PyTorch DDP", "gRPC", "Scheduling", "Telemetry"],
-  },
-  {
-    title: "Medical AI",
-    description:
-      "Applying deep learning to medical imaging for segmentation, classification, and diagnostic assistance.",
+      "Experiments with 3D deep-learning architectures for brain MRI tumor segmentation using the BraTS dataset.",
     icon: HeartPulse,
-    tags: ["3D U-Net", "BraTS", "Attention", "Dice 0.8256"],
+    tags: ["PyTorch", "3D U-Net", "EfficientNet", "BraTS"],
   },
   {
-    title: "Multi-Agent Systems",
+    title: "Weather Prediction",
     description:
-      "Designing teams of specialized AI agents that communicate and collaborate on complex tasks.",
-    icon: MessageSquare,
-    tags: ["Agent Orchestration", "Ollama", "Consensus", "RAG"],
-  },
-  {
-    title: "Large Language Models",
-    description:
-      "Efficient fine-tuning, alignment, and deployment of LLMs for production workloads.",
-    icon: Brain,
-    tags: ["Fine-tuning", "RAG", "Local Inference", "Alignment"],
-  },
-  {
-    title: "ML Systems Engineering",
-    description:
-      "Software engineering practices that improve reproducibility, scalability, and deployment of ML applications.",
-    icon: Zap,
-    tags: ["MLOps", "Docker", "FastAPI", "Model Serving", "CI/CD"],
+      "City-specific weather prediction using historical observations, lag-based features, and XGBoost.",
+    icon: CloudSun,
+    tags: ["Python", "XGBoost", "Time Series", "Feature Engineering"],
   },
 ];
 
@@ -97,10 +67,7 @@ export function Research() {
               </p>
               <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
                 {project.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2 py-1 rounded border border-border bg-background/50 text-xs font-mono text-secondary"
-                  >
+                  <span key={tag} className="px-2 py-1 rounded border border-border bg-background/50 text-xs font-mono text-secondary">
                     {tag}
                   </span>
                 ))}
@@ -111,12 +78,8 @@ export function Research() {
                     <FileText className="w-3 h-3" />
                     Publication
                   </div>
-                  <p className="text-xs text-secondary mb-1 font-medium">
-                    {project.publication.title}
-                  </p>
-                  <p className="text-xs text-secondary/70 mb-2">
-                    {project.publication.venue}
-                  </p>
+                  <p className="text-xs text-secondary mb-1 font-medium">{project.publication.title}</p>
+                  <p className="text-xs text-secondary/70 mb-2">{project.publication.venue}</p>
                   <a
                     href={`https://doi.org/${project.publication.doi}`}
                     target="_blank"
