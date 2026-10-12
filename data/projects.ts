@@ -1,5 +1,33 @@
 export const featuredProjects = [
   {
+    id: "ai-research-orchestrator",
+    title: "Aster — Distributed AI Research Scientist",
+    description:
+      "Built a hackathon-stage research orchestration MVP that turns an ML question into a literature brief, falsifiable hypothesis, bounded experiment plan, worker execution, analysis, and an evidence-labelled Markdown report.",
+    tags: ["Node.js", "LLM APIs", "Multi-Agent Systems", "PyTorch DDP", "gRPC", "Docker", "Experiment Orchestration"],
+    link: "/projects/ai-research-orchestrator",
+    problem:
+      "ML experimentation spans literature review, hypothesis design, experiment planning, compute coordination, and result interpretation; Aster connects these stages in one inspectable workflow.",
+    architecture:
+      "Research question → literature and hypothesis agents → human-reviewed experiment plan → simulated workers or optional DMLF bridge → result analysis, run timeline, and reproducibility manifest.",
+    challenges: [
+      "Kept research plans bounded and added a critic step with explicit caveats and human-approval requirements",
+      "Integrated an asynchronous worker protocol with job submission, status polling, progress updates, and metric collection",
+      "Connected the orchestration layer to the separate Distributed ML Training Framework",
+      "Recorded run provenance and distinguished simulated results from real execution",
+    ],
+    benchmarks:
+      "The default offline workflow uses deterministic agents and simulated workers; its preset metrics are not benchmark evidence. The repository documents a two-node DMLF synthetic execution smoke test and an MNIST path, but benchmark claims should be made only from a completed run with documented data provenance.",
+    lessons: [
+      "Research orchestration needs explicit review gates and inspectable intermediate artifacts",
+      "Distributed execution and scientific evidence are separate concerns",
+      "Run manifests and clear simulated-versus-real labels make results easier to audit",
+    ],
+    github: "https://github.com/ShreyanshShakya/Aster",
+    demo: "",
+    relatedProjects: ["distributed-ml-training", "agentforge"],
+  },
+  {
     id: "weather-prediction",
     title: "Weather Prediction System",
     description:
