@@ -9,15 +9,6 @@ export const experience = [
     ],
   },
   {
-    year: "2026",
-    title: "Data Analysis and LLM Intern",
-    org: "Springer Capital",
-    description: [
-      "Contribute to data analysis and business insight generation.",
-      "Support LLM-related work and AI evaluation workflow improvements.",
-    ],
-  },
-  {
     year: "2025–Present",
     title: "Independent ML Projects",
     org: "Personal Research and Development",
